@@ -9,7 +9,7 @@ export function CourseGrid({ courses }: { courses: Course[] }) {
     <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {courses.map((course, index) => (
         <li key={course.slug}>
-          <CourseCard course={course} eager={index < EAGER_CARDS} />
+          <CourseCard course={course} eager={index < EAGER_CARDS} highPriority={index === 0} />
         </li>
       ))}
     </ul>

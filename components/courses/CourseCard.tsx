@@ -12,7 +12,17 @@ import type { Course } from "@/lib/types";
 
 const THUMBNAIL_SIZES = "(min-width: 1280px) 296px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
 
-export function CourseCard({ course, eager = false }: { course: Course; eager?: boolean }) {
+export function CourseCard({
+  course,
+  eager = false,
+  highPriority = false,
+}: {
+  course: Course;
+  /** Above the fold: skip lazy loading. */
+  eager?: boolean;
+  /** The LCP image: fetch before other images. */
+  highPriority?: boolean;
+}) {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white shadow-card transition duration-200 focus-within:shadow-card-hover hover:-translate-y-0.5 hover:shadow-card-hover">
       <div className="relative aspect-video overflow-hidden bg-surface">
@@ -21,7 +31,8 @@ export function CourseCard({ course, eager = false }: { course: Course; eager?: 
           alt={`Preview of ${course.title}`}
           fill
           sizes={THUMBNAIL_SIZES}
-          loading={eager ? "eager" : "lazy"}
+          loading={eager || highPriority ? "eager" : "lazy"}
+          fetchPriority={highPriority ? "high" : "auto"}
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <span
