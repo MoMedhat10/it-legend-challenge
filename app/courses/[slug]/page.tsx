@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PlayerLayout } from "@/components/player/PlayerLayout";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { getAllCourses, getCourseBySlug } from "@/lib/courses";
 
@@ -11,18 +11,18 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/courses/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  return { title: getCourseBySlug(slug)?.title ?? "Course not found" };
+  const course = getCourseBySlug(slug);
+  return { title: course?.title ?? "Course not found", description: course?.description };
 }
 
-// Placeholder until the Course Player is built.
 export default async function CoursePlayerPage({ params }: PageProps<"/courses/[slug]">) {
   const { slug } = await params;
   const course = getCourseBySlug(slug);
   if (!course) notFound();
 
   return (
-    <main id="main" className="flex-1">
-      <div className="bg-surface py-6">
+    <main id="main" className="flex-1 pb-16">
+      <header className="bg-surface py-6 sm:py-8">
         <Container className="flex flex-col gap-3">
           <Breadcrumb
             items={[
@@ -33,12 +33,16 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
           />
           <h1 className="text-2xl font-semibold text-ink sm:text-3xl">{course.title}</h1>
         </Container>
-      </div>
-      <Container className="flex flex-col items-start gap-4 py-10">
-        <p>The course player is coming next.</p>
-        <ButtonLink href="/courses" variant="outline">
-          Back to courses
-        </ButtonLink>
+      </header>
+
+      <Container className="pt-4 lg:pt-6">
+        <PlayerLayout
+          video={<div className="aspect-video rounded-md bg-ink" />}
+          actions={null}
+          materials={null}
+          topics={null}
+          comments={null}
+        />
       </Container>
     </main>
   );

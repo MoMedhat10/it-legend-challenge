@@ -1,0 +1,71 @@
+/*
+ * Mobile: one column in reading order, video sticks to the top.
+ * Desktop: topics in a right column; wide mode gives the video the full row.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "video"
+    "actions"
+    "materials"
+    "topics"
+    "comments";
+  row-gap: 1.5rem;
+}
+
+.video {
+  grid-area: video;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.actions {
+  grid-area: actions;
+}
+
+.materials {
+  grid-area: materials;
+  margin-top: 1rem;
+}
+
+.topics {
+  grid-area: topics;
+}
+
+.comments {
+  grid-area: comments;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    column-gap: 3rem;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "video topics"
+      "actions topics"
+      "materials topics"
+      "comments topics";
+  }
+
+  .layout[data-wide="true"] {
+    grid-template-areas:
+      "video video"
+      "actions actions"
+      "materials topics"
+      "comments topics";
+  }
+
+  .video {
+    position: static;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout {
+    column-gap: 4.5rem;
+    grid-template-columns: minmax(0, 1fr) 27rem;
+  }
+}
