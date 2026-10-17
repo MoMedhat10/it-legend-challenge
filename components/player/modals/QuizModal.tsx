@@ -62,8 +62,8 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
   const retry = () => setState(freshState(quiz));
 
   return (
-    <Modal open={open} onClose={onClose} title={title} size="fullscreen" hideHeader className="bg-quiz text-white">
-      <div className="flex flex-1 flex-col overflow-y-auto">
+    <Modal open={open} onClose={onClose} title={title} size="fullscreen" hideHeader>
+      <div className="flex flex-1 flex-col overflow-y-auto bg-quiz text-white">
         <header className="mx-auto flex w-full max-w-2xl items-center justify-between gap-3 px-4 pt-4 sm:pt-6">
           <button
             type="button"
@@ -131,7 +131,7 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
                     return (
                       <label
                         key={option}
-                        className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-quiz ${
+                        className={`flex min-h-12 cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-sm transition-colors has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-quiz ${
                           selected ? "border-quiz bg-quiz text-white" : "border-line hover:border-quiz"
                         }`}
                       >

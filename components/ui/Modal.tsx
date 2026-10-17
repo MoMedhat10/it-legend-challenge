@@ -16,7 +16,6 @@ interface ModalProps {
   hideHeader?: boolean;
   /** Extra actions shown next to the close button. */
   headerActions?: ReactNode;
-  className?: string;
   children: ReactNode;
 }
 
@@ -37,7 +36,6 @@ export function Modal({
   size = "md",
   hideHeader = false,
   headerActions,
-  className = "",
   children,
 }: ModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -77,7 +75,7 @@ export function Modal({
         // Click on the backdrop (the dialog element itself) closes small modals.
         if (size === "md" && event.target === event.currentTarget) onClose();
       }}
-      className={`overflow-hidden bg-white p-0 text-body shadow-2xl backdrop:bg-ink/60 open:flex open:flex-col ${sizes[size]} ${className}`}
+      className={`overflow-hidden bg-white p-0 text-body shadow-2xl backdrop:bg-ink/60 open:flex open:flex-col ${sizes[size]}`}
     >
       {open && (
         <>
