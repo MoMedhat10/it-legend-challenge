@@ -20,6 +20,7 @@ import {
   getPosterUrl,
   getYouTubeUrl,
 } from "@/lib/courses";
+import { formatDuration } from "@/lib/format";
 
 export function generateStaticParams() {
   return getAllCourses().map((course) => ({ slug: course.slug }));
@@ -72,7 +73,7 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
             <CourseMaterials
               items={[
                 { icon: UserRound, label: "Instructor", value: course.instructor },
-                { icon: Clock, label: "Duration", value: course.durationLabel },
+                { icon: Clock, label: "Duration", value: formatDuration(course.videoDurationSec) },
                 { icon: Library, label: "Lessons", value: String(getLessonCount(course)) },
                 { icon: GraduationCap, label: "Enrolled", value: `${course.enrolled.toLocaleString("en-US")} students` },
                 { icon: Globe, label: "Language", value: course.language },

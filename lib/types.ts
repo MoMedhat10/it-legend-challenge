@@ -27,7 +27,6 @@ export interface Course {
   level: "Beginner" | "Intermediate" | "Advanced";
   language: string;
   enrolled: number;
-  durationLabel: string;
   youtubeId: string;
   videoDurationSec: number;
   thumbnail?: string;

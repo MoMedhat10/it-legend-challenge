@@ -57,7 +57,6 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 65,
-    durationLabel: "3 weeks",
     youtubeId: "DvwS7cV9GmQ",
     videoDurationSec: 1179,
     weeks: [
@@ -88,7 +87,6 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 1240,
-    durationLabel: "4 weeks",
     youtubeId: "PkZNo7MFNFg",
     videoDurationSec: 12403,
     weeks: [
@@ -115,7 +113,6 @@ export const courses: Course[] = [
     level: "Intermediate",
     language: "English",
     enrolled: 860,
-    durationLabel: "4 weeks",
     youtubeId: "bMknfKXIFA8",
     videoDurationSec: 42927,
     weeks: [
@@ -136,7 +133,6 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 2310,
-    durationLabel: "4 weeks",
     youtubeId: "pQN-pnXPaVg",
     videoDurationSec: 7351,
     weeks: [
@@ -164,7 +160,6 @@ export const courses: Course[] = [
     level: "Intermediate",
     language: "English",
     enrolled: 540,
-    durationLabel: "6 weeks",
     youtubeId: "1Rs2ND1ryYc",
     videoDurationSec: 22718,
     weeks: [
@@ -183,7 +178,6 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 3120,
-    durationLabel: "6 weeks",
     youtubeId: "rfscVS0vtbw",
     videoDurationSec: 16012,
     weeks: [
@@ -217,7 +211,6 @@ export const courses: Course[] = [
     level: "Advanced",
     language: "English",
     enrolled: 410,
-    durationLabel: "4 weeks",
     youtubeId: "30LWjhZzg50",
     videoDurationSec: 17185,
     weeks: [
@@ -235,7 +228,6 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 1780,
-    durationLabel: "4 weeks",
     youtubeId: "RGOj5yH7evk",
     videoDurationSec: 4110,
     weeks: [

@@ -1,5 +1,5 @@
 import { BookOpen, Clock } from "lucide-react";
-import { formatDuration, formatDurationLong, pluralize } from "@/lib/format";
+import { formatDuration, pluralize } from "@/lib/format";
 
 export function CourseMeta({ durationSec, lessonCount }: { durationSec: number; lessonCount: number }) {
   return (
@@ -9,10 +9,7 @@ export function CourseMeta({ durationSec, lessonCount }: { durationSec: number; 
           <Clock aria-hidden className="size-4" />
           <span className="sr-only">Duration</span>
         </dt>
-        <dd>
-          <span aria-hidden>{formatDuration(durationSec)}</span>
-          <span className="sr-only">{formatDurationLong(durationSec)}</span>
-        </dd>
+        <dd>{formatDuration(durationSec)}</dd>
       </div>
       <div className="flex items-center gap-1.5">
         <dt>

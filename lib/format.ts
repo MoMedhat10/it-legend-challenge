@@ -7,18 +7,6 @@ export function formatDuration(totalSec: number): string {
   return minutes === 0 ? `${hours}h` : `${hours}h ${minutes}m`;
 }
 
-/** Same as formatDuration, spelled out for screen readers. */
-export function formatDurationLong(totalSec: number): string {
-  const totalMin = Math.max(1, Math.round(totalSec / 60));
-  const hours = Math.floor(totalMin / 60);
-  const minutes = totalMin % 60;
-  const parts = [
-    hours > 0 && pluralize(hours, "hour"),
-    minutes > 0 && pluralize(minutes, "minute"),
-  ].filter(Boolean);
-  return parts.join(" ");
-}
-
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
