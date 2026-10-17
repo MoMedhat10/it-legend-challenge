@@ -15,16 +15,14 @@ const STATUS_TONE: Record<CourseStatus, BadgeTone> = {
 };
 
 export function CourseProgress({ seed, title }: { seed: ProgressSeed; title: string }) {
-  const { completed, percent, status } = useCourseProgress(seed);
+  const { percent, status } = useCourseProgress(seed);
   const cta = CTA_LABEL[status];
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-2">
         <Badge tone={STATUS_TONE[status]}>{STATUS_LABEL[status]}</Badge>
-        <span className="text-sm text-muted">
-          {completed}/{seed.totalLessons} · <span className="font-semibold text-ink">{percent}%</span>
-        </span>
+        <span className="text-sm font-semibold text-ink">{percent}%</span>
       </div>
       <ProgressBar value={percent} label={`${title} progress`} />
       {/* The ::after overlay stretches this link over the whole card, so the
