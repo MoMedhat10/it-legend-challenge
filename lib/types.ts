@@ -1,24 +1,21 @@
-export type LessonType = "video" | "pdf" | "exam";
-
-export interface Lesson {
-  id: string;
-  title: string;
-  type: LessonType;
-  /** Video lessons: YouTube video id and the chapter inside it. */
-  youtubeId?: string;
-  startSec?: number;
-  /** Video length, or the time limit for an exam. */
-  durationSec?: number;
-  /** Exam lessons only. */
-  questionCount?: number;
-  locked?: boolean;
-}
+export type TopicItem =
+  | {
+      id: string;
+      type: "lesson";
+      title: string;
+      locked?: boolean;
+      current?: boolean;
+      questionCount?: number;
+      durationMin?: number;
+    }
+  | { id: string; type: "pdf"; title: string; file: string }
+  | { id: string; type: "quiz"; title: string; quizId: string };
 
 export interface Week {
   id: string;
   title: string;
   description: string;
-  lessons: Lesson[];
+  items: TopicItem[];
 }
 
 export interface Course {
@@ -30,13 +27,39 @@ export interface Course {
   level: "Beginner" | "Intermediate" | "Advanced";
   language: string;
   enrolled: number;
-  /** Cover video; its YouTube thumbnail is used as the course image. */
+  durationLabel: string;
   youtubeId: string;
-  /** Optional custom image that overrides the YouTube thumbnail. */
+  videoDurationSec: number;
   thumbnail?: string;
   weeks: Week[];
-  /** Demo progress: the first N lessons count as completed until the student has saved progress. */
-  seedCompletedLessons: number;
+  seedWatchedPercent: number;
 }
 
 export type CourseStatus = "not-started" | "in-progress" | "completed";
+
+export interface QuizQuestion {
+  id: string;
+  text: string;
+  options: string[];
+  answerIndex: number;
+}
+
+export interface Quiz {
+  id: string;
+  timeLimitSec: number;
+  questions: QuizQuestion[];
+}
+
+export interface Comment {
+  id: string;
+  author: string;
+  date: string;
+  text: string;
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  name: string;
+  points: number;
+  isYou?: boolean;
+}

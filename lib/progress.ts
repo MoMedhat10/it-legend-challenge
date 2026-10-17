@@ -1,78 +1,29 @@
+import { parseJson, readStorage, writeStorage } from "@/lib/storage";
 import type { CourseStatus } from "@/lib/types";
 
 /*
- * Student progress lives in localStorage so it survives reloads and is
- * shared between the courses page and the course player.
+ * Progress = how much of the course video was actually watched.
+ * The video is split into SEGMENTS equal parts; a part counts once it has
+ * been played through, so seeking to the end does not complete a course.
  */
 
+export const PROGRESS_KEY = "course-progress:v2";
+export const SEGMENTS = 100;
+
 export interface StoredCourseProgress {
-  completedLessonIds: string[];
-  lastLessonId?: string;
+  watchedSegments: number[];
 }
 
 export type ProgressMap = Record<string, StoredCourseProgress>;
 
-/** What the server knows about a course; enough to resolve progress on the client. */
 export interface ProgressSeed {
   slug: string;
-  totalLessons: number;
-  seedCompletedLessons: number;
+  seedWatchedPercent: number;
 }
 
 export interface ResolvedProgress {
-  completed: number;
   percent: number;
   status: CourseStatus;
-  lastLessonId?: string;
-}
-
-const STORAGE_KEY = "course-progress:v1";
-const CHANGE_EVENT = "course-progress-change";
-
-export function readProgressRaw(): string | null {
-  try {
-    return window.localStorage.getItem(STORAGE_KEY);
-  } catch {
-    return null; // storage blocked (private mode, disabled cookies)
-  }
-}
-
-export function parseProgress(raw: string | null): ProgressMap {
-  if (!raw) return {};
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    return parsed && typeof parsed === "object" ? (parsed as ProgressMap) : {};
-  } catch {
-    return {};
-  }
-}
-
-export function subscribeToProgress(onChange: () => void): () => void {
-  // "storage" fires for other tabs, the custom event for this tab.
-  window.addEventListener("storage", onChange);
-  window.addEventListener(CHANGE_EVENT, onChange);
-  return () => {
-    window.removeEventListener("storage", onChange);
-    window.removeEventListener(CHANGE_EVENT, onChange);
-  };
-}
-
-export function saveCourseProgress(slug: string, progress: StoredCourseProgress): void {
-  const map = parseProgress(readProgressRaw());
-  map[slug] = progress;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
-  } catch {
-    return;
-  }
-  window.dispatchEvent(new Event(CHANGE_EVENT));
-}
-
-export function markLessonComplete(slug: string, lessonId: string): void {
-  const current = parseProgress(readProgressRaw())[slug];
-  const ids = new Set(current?.completedLessonIds);
-  ids.add(lessonId);
-  saveCourseProgress(slug, { completedLessonIds: [...ids], lastLessonId: lessonId });
 }
 
 export function getStatus(percent: number): CourseStatus {
@@ -83,10 +34,28 @@ export function getStatus(percent: number): CourseStatus {
 
 export function resolveProgress(seed: ProgressSeed, map: ProgressMap): ResolvedProgress {
   const stored = map[seed.slug];
-  const rawCompleted = stored ? stored.completedLessonIds.length : seed.seedCompletedLessons;
-  const completed = Math.min(rawCompleted, seed.totalLessons);
-  const percent = seed.totalLessons === 0 ? 0 : Math.round((completed / seed.totalLessons) * 100);
-  return { completed, percent, status: getStatus(percent), lastLessonId: stored?.lastLessonId };
+  const percent = stored
+    ? Math.round((stored.watchedSegments.length / SEGMENTS) * 100)
+    : seed.seedWatchedPercent;
+  return { percent, status: getStatus(percent) };
+}
+
+/** Demo progress becomes real watched segments on the first save, so the bar never jumps back. */
+function seedSegments(seed: ProgressSeed): number[] {
+  const count = Math.round((seed.seedWatchedPercent / 100) * SEGMENTS);
+  return Array.from({ length: count }, (_, i) => i);
+}
+
+export function addWatchedSegments(seed: ProgressSeed, segments: number[]): void {
+  const map = parseJson<ProgressMap>(readStorage("local", PROGRESS_KEY), {});
+  const watched = new Set(map[seed.slug]?.watchedSegments ?? seedSegments(seed));
+  const before = watched.size;
+  for (const segment of segments) {
+    if (segment >= 0 && segment < SEGMENTS) watched.add(segment);
+  }
+  if (watched.size === before && map[seed.slug]) return;
+  map[seed.slug] = { watchedSegments: [...watched].sort((a, b) => a - b) };
+  writeStorage("local", PROGRESS_KEY, map);
 }
 
 export const STATUS_LABEL: Record<CourseStatus, string> = {

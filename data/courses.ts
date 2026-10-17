@@ -1,47 +1,48 @@
-import type { Course, Lesson } from "@/lib/types";
+import type { Course, TopicItem, Week } from "@/lib/types";
 
 /*
- * Mock catalogue. Every YouTube id was checked against YouTube's oEmbed
- * endpoint to make sure the video exists and allows embedding.
- * Lessons are chapters of the videos (startSec + durationSec).
+ * Mock catalogue. Every course plays one YouTube video; ids were checked
+ * against YouTube's oEmbed endpoint (exists + embeddable) and
+ * videoDurationSec is the real video length.
  */
 
-const video = (
+const SUMMARY_PDF = "/pdfs/course-summary.pdf";
+
+const lesson = (
   id: string,
   title: string,
-  youtubeId: string,
-  startSec: number,
-  durationSec: number,
-  locked = false,
-): Lesson => ({ id, title, type: "video", youtubeId, startSec, durationSec, locked });
+  extra: Omit<Extract<TopicItem, { type: "lesson" }>, "id" | "title" | "type"> = { locked: true },
+): TopicItem => ({ id, title, type: "lesson", ...extra });
 
-const pdf = (id: string, title: string): Lesson => ({ id, title, type: "pdf" });
+const pdf = (id: string): TopicItem => ({ id, title: "Course Summary (PDF)", type: "pdf", file: SUMMARY_PDF });
 
-const exam = (id: string, title: string, questionCount: number, minutes: number): Lesson => ({
-  id,
+const quiz = (id: string, title: string, quizId: string): TopicItem => ({ id, title, type: "quiz", quizId });
+
+/** First week: summary PDF, the current lesson, locked lessons, then the week quiz. */
+const firstWeek = (title: string, description: string, quizId: string, lessons: string[]): Week => {
+  const [current, ...rest] = lessons;
+  return {
+    id: "week-1",
+    title,
+    description,
+    items: [
+      pdf("w1-pdf"),
+      lesson("w1-l1", current, { current: true, questionCount: 0, durationMin: 30 }),
+      ...rest.map((name, i) => lesson(`w1-l${i + 2}`, name)),
+      quiz("w1-quiz", `${title}: Questions`, quizId),
+    ],
+  };
+};
+
+const nextWeek = (index: number, title: string, description: string, quizId: string, lessons: string[]): Week => ({
+  id: `week-${index}`,
   title,
-  type: "exam",
-  questionCount,
-  durationSec: minutes * 60,
+  description,
+  items: [
+    ...lessons.map((name, i) => lesson(`w${index}-l${i + 1}`, name)),
+    quiz(`w${index}-quiz`, `${title}: Questions`, quizId),
+  ],
 });
-
-const SEO = "DvwS7cV9GmQ";
-const PHP = "OK_JCtrrv-c";
-const JS_FULL = "PkZNo7MFNFg";
-const JS_100 = "DHjqpvDnNGE";
-const JS_CRASH = "hdI2bqOjy3c";
-const EVENT_LOOP = "8aGhZQkoFbQ";
-const REACT_FULL = "bMknfKXIFA8";
-const REACT_100 = "Tn6-PIqc4UM";
-const REACT_CRASH = "w7ejDZ8SWv8";
-const HTML_FULL = "pQN-pnXPaVg";
-const CSS_FULL = "1Rs2ND1ryYc";
-const FRONTEND_BOOTCAMP = "zJSY8tbf_ys";
-const PYTHON_FULL = "rfscVS0vtbw";
-const PYTHON_100 = "x7X9w_GIm1s";
-const TS_FULL = "30LWjhZzg50";
-const TS_100 = "zQnBQ4tB3ZA";
-const GIT = "RGOj5yH7evk";
 
 const storyDescription = "Advanced story telling techniques for writers: Personas, Characters & Plots";
 
@@ -56,35 +57,26 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 65,
-    youtubeId: SEO,
-    seedCompletedLessons: 5,
+    durationLabel: "3 weeks",
+    youtubeId: "DvwS7cV9GmQ",
+    videoDurationSec: 1179,
+    seedWatchedPercent: 42,
     weeks: [
-      {
-        id: "week-1-4",
-        title: "Week 1-4",
-        description: storyDescription,
-        lessons: [
-          video("w1-l1", "Introduction", SEO, 0, 420),
-          video("w1-l2", "Course Overview", SEO, 420, 540),
-          exam("w1-l3", "Course Overview", 0, 10),
-          pdf("w1-l4", "Course Exercise / Reference Files"),
-          video("w1-l5", "Code Editor Installation (Optional if you have one)", PHP, 300, 600),
-          video("w1-l6", "Embedding PHP in HTML", PHP, 900, 720, true),
-        ],
-      },
-      {
-        id: "week-5-8",
-        title: "Week 5-8",
-        description: storyDescription,
-        lessons: [
-          video("w5-l1", "Defining Functions", PHP, 6000, 660, true),
-          video("w5-l2", "Function Parameters", PHP, 6660, 540, true),
-          exam("w5-l3", "Return Values From Functions", 2, 15),
-          video("w5-l4", "Global Variable and Scope", PHP, 7200, 600, true),
-          video("w5-l5", "Newer Way of creating a Constant", PHP, 7800, 480, true),
-          video("w5-l6", "Constants", PHP, 8280, 420, true),
-        ],
-      },
+      firstWeek("Week 1-4", storyDescription, "seo", [
+        "Introduction",
+        "Course Overview",
+        "Course Exercise / Reference Files",
+        "Code Editor Installation (Optional if you have one)",
+        "Embedding PHP in HTML",
+      ]),
+      nextWeek(2, "Week 5-8", storyDescription, "seo", [
+        "Defining Functions",
+        "Function Parameters",
+        "Return Values From Functions",
+        "Global Variable and Scope",
+        "Newer Way of creating a Constant",
+        "Constants",
+      ]),
     ],
   },
   {
@@ -97,33 +89,23 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 1240,
-    youtubeId: JS_FULL,
-    seedCompletedLessons: 10,
+    durationLabel: "2 weeks",
+    youtubeId: "PkZNo7MFNFg",
+    videoDurationSec: 12403,
+    seedWatchedPercent: 100,
     weeks: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        description: "Core syntax and how JavaScript runs in the browser.",
-        lessons: [
-          video("w1-l1", "JavaScript in 100 Seconds", JS_100, 0, 120),
-          video("w1-l2", "Variables and Data Types", JS_FULL, 600, 900),
-          video("w1-l3", "Strings and Template Literals", JS_FULL, 1500, 780),
-          video("w1-l4", "Functions and Scope", JS_FULL, 2280, 1020),
-          exam("w1-l5", "Syntax Check", 5, 10),
-        ],
-      },
-      {
-        id: "week-2",
-        title: "Week 2",
-        description: "Working with collections and asynchronous code.",
-        lessons: [
-          video("w2-l1", "Arrays and Loops", JS_CRASH, 1800, 840),
-          video("w2-l2", "Objects and JSON", JS_CRASH, 2640, 720),
-          video("w2-l3", "The DOM", JS_CRASH, 3360, 960),
-          video("w2-l4", "What the Heck is the Event Loop?", EVENT_LOOP, 0, 1560),
-          exam("w2-l5", "Final Quiz", 10, 20),
-        ],
-      },
+      firstWeek("Week 1", "Core syntax and how JavaScript runs in the browser.", "javascript", [
+        "Getting Started",
+        "Variables and Data Types",
+        "Strings and Template Literals",
+        "Functions and Scope",
+      ]),
+      nextWeek(2, "Week 2", "Working with collections and the DOM.", "javascript", [
+        "Arrays and Loops",
+        "Objects and JSON",
+        "The DOM",
+        "The Event Loop",
+      ]),
     ],
   },
   {
@@ -135,31 +117,17 @@ export const courses: Course[] = [
     level: "Intermediate",
     language: "English",
     enrolled: 860,
-    youtubeId: REACT_FULL,
-    seedCompletedLessons: 3,
+    durationLabel: "4 weeks",
+    youtubeId: "bMknfKXIFA8",
+    videoDurationSec: 42927,
+    seedWatchedPercent: 38,
     weeks: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        description: "Thinking in components.",
-        lessons: [
-          video("w1-l1", "React in 100 Seconds", REACT_100, 0, 130),
-          video("w1-l2", "JSX and Components", REACT_FULL, 300, 1200),
-          video("w1-l3", "Props", REACT_FULL, 1500, 960),
-          pdf("w1-l4", "Project Starter Files"),
-        ],
-      },
-      {
-        id: "week-2",
-        title: "Week 2",
-        description: "State, effects and data.",
-        lessons: [
-          video("w2-l1", "useState", REACT_CRASH, 2400, 900),
-          video("w2-l2", "useEffect and Fetching Data", REACT_CRASH, 3300, 1080),
-          video("w2-l3", "Forms and Controlled Inputs", REACT_FULL, 9000, 1140),
-          exam("w2-l4", "Hooks Quiz", 8, 15),
-        ],
-      },
+      firstWeek("Week 1-2", "Thinking in components.", "react", ["Why React?", "JSX and Components", "Props"]),
+      nextWeek(2, "Week 3-4", "State, effects and data.", "react", [
+        "useState",
+        "useEffect and Fetching Data",
+        "Forms and Controlled Inputs",
+      ]),
     ],
   },
   {
@@ -171,20 +139,16 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 2310,
-    youtubeId: HTML_FULL,
-    seedCompletedLessons: 0,
+    durationLabel: "1 week",
+    youtubeId: "pQN-pnXPaVg",
+    videoDurationSec: 7351,
+    seedWatchedPercent: 0,
     weeks: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        description: "The building blocks of every web page.",
-        lessons: [
-          video("w1-l1", "Document Structure", HTML_FULL, 0, 840),
-          video("w1-l2", "Text, Links and Images", HTML_FULL, 840, 1320),
-          video("w1-l3", "Forms and Inputs", HTML_FULL, 4200, 1500),
-          exam("w1-l4", "HTML Quiz", 6, 10),
-        ],
-      },
+      firstWeek("Week 1", "The building blocks of every web page.", "html", [
+        "Document Structure",
+        "Text, Links and Images",
+        "Forms and Inputs",
+      ]),
     ],
   },
   {
@@ -197,30 +161,14 @@ export const courses: Course[] = [
     level: "Intermediate",
     language: "English",
     enrolled: 540,
-    youtubeId: CSS_FULL,
-    seedCompletedLessons: 0,
+    durationLabel: "3 weeks",
+    youtubeId: "1Rs2ND1ryYc",
+    videoDurationSec: 22718,
+    seedWatchedPercent: 0,
     weeks: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        description: "Foundations of layout.",
-        lessons: [
-          video("w1-l1", "The Box Model", CSS_FULL, 1800, 1080),
-          video("w1-l2", "Flexbox", CSS_FULL, 12600, 1800),
-          video("w1-l3", "CSS Grid", CSS_FULL, 18000, 2100),
-        ],
-      },
-      {
-        id: "week-2",
-        title: "Week 2",
-        description: "Responsive patterns.",
-        lessons: [
-          video("w2-l1", "Media Queries", FRONTEND_BOOTCAMP, 9000, 1500),
-          video("w2-l2", "Fluid Typography", FRONTEND_BOOTCAMP, 10500, 900),
-          pdf("w2-l3", "Landing Page Assets"),
-          exam("w2-l4", "Layout Challenge", 12, 30),
-        ],
-      },
+      firstWeek("Week 1", "Foundations of layout.", "css", ["The Box Model", "Flexbox", "CSS Grid"]),
+      nextWeek(2, "Week 2", "Responsive patterns.", "css", ["Media Queries", "Fluid Typography", "Container Queries"]),
+      nextWeek(3, "Week 3", "Putting it all together.", "css", ["Landing Page One", "Landing Page Two", "Landing Page Three"]),
     ],
   },
   {
@@ -233,46 +181,29 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 3120,
-    youtubeId: PYTHON_FULL,
-    seedCompletedLessons: 2,
+    durationLabel: "6 weeks",
+    youtubeId: "rfscVS0vtbw",
+    videoDurationSec: 16012,
+    seedWatchedPercent: 13,
     weeks: [
-      {
-        id: "week-1-2",
-        title: "Week 1-2",
-        description: "Getting set up and writing your first programs.",
-        lessons: [
-          video("w1-l1", "Python in 100 Seconds", PYTHON_100, 0, 140),
-          video("w1-l2", "Installing Python", PYTHON_FULL, 0, 660),
-          video("w1-l3", "Your First Program", PYTHON_FULL, 660, 480),
-          video("w1-l4", "Variables", PYTHON_FULL, 1140, 600),
-          video("w1-l5", "Strings", PYTHON_FULL, 1740, 720),
-          exam("w1-l6", "Basics Quiz", 5, 10),
-        ],
-      },
-      {
-        id: "week-3-4",
-        title: "Week 3-4",
-        description: "Control flow and data structures.",
-        lessons: [
-          video("w3-l1", "Lists", PYTHON_FULL, 3600, 780),
-          video("w3-l2", "Tuples", PYTHON_FULL, 4380, 420),
-          video("w3-l3", "Functions", PYTHON_FULL, 4800, 900),
-          video("w3-l4", "If Statements", PYTHON_FULL, 5700, 840),
-          video("w3-l5", "Dictionaries", PYTHON_FULL, 6540, 600),
-          pdf("w3-l6", "Cheat Sheet"),
-        ],
-      },
-      {
-        id: "week-5-6",
-        title: "Week 5-6",
-        description: "Loops, files and classes.",
-        lessons: [
-          video("w5-l1", "While and For Loops", PYTHON_FULL, 7200, 1080),
-          video("w5-l2", "Reading Files", PYTHON_FULL, 11400, 720),
-          video("w5-l3", "Classes and Objects", PYTHON_FULL, 13800, 900),
-          exam("w5-l4", "Final Exam", 15, 30),
-        ],
-      },
+      firstWeek("Week 1-2", "Getting set up and writing your first programs.", "python", [
+        "Installing Python",
+        "Your First Program",
+        "Variables",
+        "Strings",
+      ]),
+      nextWeek(2, "Week 3-4", "Control flow and data structures.", "python", [
+        "Lists",
+        "Tuples",
+        "Functions",
+        "If Statements",
+        "Dictionaries",
+      ]),
+      nextWeek(3, "Week 5-6", "Loops, files and classes.", "python", [
+        "While and For Loops",
+        "Reading Files",
+        "Classes and Objects",
+      ]),
     ],
   },
   {
@@ -285,22 +216,13 @@ export const courses: Course[] = [
     level: "Advanced",
     language: "English",
     enrolled: 410,
-    youtubeId: TS_FULL,
-    seedCompletedLessons: 4,
+    durationLabel: "2 weeks",
+    youtubeId: "30LWjhZzg50",
+    videoDurationSec: 17185,
+    seedWatchedPercent: 67,
     weeks: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        description: "The type system.",
-        lessons: [
-          video("w1-l1", "TypeScript in 100 Seconds", TS_100, 0, 140),
-          video("w1-l2", "Basic Types", TS_FULL, 600, 1200),
-          video("w1-l3", "Interfaces vs Types", TS_FULL, 1800, 900),
-          video("w1-l4", "Generics", TS_FULL, 2700, 1500),
-          video("w1-l5", "Narrowing", TS_FULL, 4200, 960),
-          exam("w1-l6", "Types Quiz", 10, 20),
-        ],
-      },
+      firstWeek("Week 1", "The type system.", "typescript", ["Basic Types", "Interfaces vs Types"]),
+      nextWeek(2, "Week 2", "Advanced patterns.", "typescript", ["Generics", "Narrowing", "Utility Types"]),
     ],
   },
   {
@@ -313,19 +235,16 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 1780,
-    youtubeId: GIT,
-    seedCompletedLessons: 0,
+    durationLabel: "1 week",
+    youtubeId: "RGOj5yH7evk",
+    videoDurationSec: 4110,
+    seedWatchedPercent: 0,
     weeks: [
-      {
-        id: "week-1",
-        title: "Week 1",
-        description: "Version control in one week.",
-        lessons: [
-          video("w1-l1", "What is Git?", GIT, 0, 540),
-          video("w1-l2", "Branches and Merging", GIT, 1800, 900),
-          video("w1-l3", "Pull Requests on GitHub", GIT, 2700, 780),
-        ],
-      },
+      firstWeek("Week 1", "Version control in one week.", "git", [
+        "What is Git?",
+        "Branches and Merging",
+        "Pull Requests on GitHub",
+      ]),
     ],
   },
 ];

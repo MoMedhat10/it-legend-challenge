@@ -1,6 +1,6 @@
 import { courses } from "@/data/courses";
 import type { ProgressSeed } from "@/lib/progress";
-import type { Course, Lesson } from "@/lib/types";
+import type { Course } from "@/lib/types";
 
 export function getAllCourses(): Course[] {
   return courses;
@@ -10,28 +10,15 @@ export function getCourseBySlug(slug: string): Course | undefined {
   return courses.find((course) => course.slug === slug);
 }
 
-export function getLessons(course: Course): Lesson[] {
-  return course.weeks.flatMap((week) => week.lessons);
-}
-
 export function getLessonCount(course: Course): number {
-  return getLessons(course).length;
-}
-
-/** Total watch time: only video lessons count towards a course's duration. */
-export function getTotalDurationSec(course: Course): number {
-  return getLessons(course).reduce(
-    (total, lesson) => (lesson.type === "video" ? total + (lesson.durationSec ?? 0) : total),
+  return course.weeks.reduce(
+    (total, week) => total + week.items.filter((item) => item.type === "lesson").length,
     0,
   );
 }
 
 export function getProgressSeed(course: Course): ProgressSeed {
-  return {
-    slug: course.slug,
-    totalLessons: getLessonCount(course),
-    seedCompletedLessons: course.seedCompletedLessons,
-  };
+  return { slug: course.slug, seedWatchedPercent: course.seedWatchedPercent };
 }
 
 export function getThumbnailUrl(course: Course): string {

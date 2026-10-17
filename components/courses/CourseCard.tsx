@@ -2,12 +2,7 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import { CourseMeta } from "@/components/courses/CourseMeta";
 import { CourseProgress } from "@/components/courses/CourseProgress";
-import {
-  getLessonCount,
-  getProgressSeed,
-  getThumbnailUrl,
-  getTotalDurationSec,
-} from "@/lib/courses";
+import { getLessonCount, getProgressSeed, getThumbnailUrl } from "@/lib/courses";
 import type { Course } from "@/lib/types";
 
 const THUMBNAIL_SIZES = "(min-width: 1280px) 296px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
@@ -55,7 +50,7 @@ export function CourseCard({
           <p className="text-sm text-muted">By {course.instructor}</p>
         </div>
         <p className="line-clamp-2 text-sm leading-relaxed">{course.description}</p>
-        <CourseMeta durationSec={getTotalDurationSec(course)} lessonCount={getLessonCount(course)} />
+        <CourseMeta durationSec={course.videoDurationSec} lessonCount={getLessonCount(course)} />
         <div className="mt-auto border-t border-line pt-4">
           <CourseProgress seed={getProgressSeed(course)} title={course.title} />
         </div>
