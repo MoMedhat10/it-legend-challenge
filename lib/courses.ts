@@ -1,4 +1,5 @@
 import { courses } from "@/data/courses";
+import type { ProgressSeed } from "@/lib/progress";
 import type { Course, Lesson } from "@/lib/types";
 
 export function getAllCourses(): Course[] {
@@ -23,6 +24,14 @@ export function getTotalDurationSec(course: Course): number {
     (total, lesson) => (lesson.type === "video" ? total + (lesson.durationSec ?? 0) : total),
     0,
   );
+}
+
+export function getProgressSeed(course: Course): ProgressSeed {
+  return {
+    slug: course.slug,
+    totalLessons: getLessonCount(course),
+    seedCompletedLessons: course.seedCompletedLessons,
+  };
 }
 
 export function getThumbnailUrl(course: Course): string {
