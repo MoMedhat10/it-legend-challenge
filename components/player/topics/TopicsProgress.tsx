@@ -2,11 +2,10 @@
 
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useCourseProgress } from "@/hooks/useProgress";
-import type { ProgressSeed } from "@/lib/progress";
 
 /** Progress bar with a "You" marker that travels along it (reference: Course Progress). */
-export function TopicsProgress({ seed }: { seed: ProgressSeed }) {
-  const { percent } = useCourseProgress(seed);
+export function TopicsProgress({ slug }: { slug: string }) {
+  const { percent } = useCourseProgress(slug);
   // Keep the marker inside the bar at 0% and 100%.
   const left = `clamp(1.25rem, ${percent}%, calc(100% - 1.25rem))`;
 

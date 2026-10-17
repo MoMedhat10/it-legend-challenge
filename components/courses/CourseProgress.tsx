@@ -5,7 +5,7 @@ import { Badge, type BadgeTone } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useCourseProgress } from "@/hooks/useProgress";
-import { CTA_LABEL, STATUS_LABEL, type ProgressSeed } from "@/lib/progress";
+import { CTA_LABEL, STATUS_LABEL } from "@/lib/progress";
 import type { CourseStatus } from "@/lib/types";
 
 const STATUS_TONE: Record<CourseStatus, BadgeTone> = {
@@ -14,8 +14,8 @@ const STATUS_TONE: Record<CourseStatus, BadgeTone> = {
   completed: "brand",
 };
 
-export function CourseProgress({ seed, title }: { seed: ProgressSeed; title: string }) {
-  const { percent, status } = useCourseProgress(seed);
+export function CourseProgress({ slug, title }: { slug: string; title: string }) {
+  const { percent, status } = useCourseProgress(slug);
   const cta = CTA_LABEL[status];
 
   return (
@@ -28,7 +28,7 @@ export function CourseProgress({ seed, title }: { seed: ProgressSeed; title: str
       {/* The ::after overlay stretches this link over the whole card, so the
           card is clickable while keeping a single link per course. */}
       <ButtonLink
-        href={`/courses/${seed.slug}`}
+        href={`/courses/${slug}`}
         // Per-link prefetch resolves the course params before the click, so the page opens instantly.
         prefetch
         variant={status === "completed" ? "outline" : "primary"}

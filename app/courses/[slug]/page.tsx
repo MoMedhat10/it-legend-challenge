@@ -20,7 +20,6 @@ import {
   getCourseBySlug,
   getLessonCount,
   getPosterUrl,
-  getProgressSeed,
   getYouTubeUrl,
 } from "@/lib/courses";
 
@@ -73,7 +72,7 @@ async function CourseContent({ params }: Pick<PageProps<"/courses/[slug]">, "par
               title={course.title}
               src={getYouTubeUrl(course)}
               poster={getPosterUrl(course)}
-              seed={getProgressSeed(course)}
+              slug={course.slug}
             />
           }
           actions={

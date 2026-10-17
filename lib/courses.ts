@@ -1,5 +1,4 @@
 import { courses } from "@/data/courses";
-import type { ProgressSeed } from "@/lib/progress";
 import type { Course } from "@/lib/types";
 
 export function getAllCourses(): Course[] {
@@ -15,10 +14,6 @@ export function getLessonCount(course: Course): number {
     (total, week) => total + week.items.filter((item) => item.type === "lesson").length,
     0,
   );
-}
-
-export function getProgressSeed(course: Course): ProgressSeed {
-  return { slug: course.slug, seedWatchedPercent: course.seedWatchedPercent };
 }
 
 export function getThumbnailUrl(course: Course): string {

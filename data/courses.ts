@@ -60,7 +60,6 @@ export const courses: Course[] = [
     durationLabel: "3 weeks",
     youtubeId: "DvwS7cV9GmQ",
     videoDurationSec: 1179,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-4", storyDescription, "seo", [
         "Introduction",
@@ -92,7 +91,6 @@ export const courses: Course[] = [
     durationLabel: "4 weeks",
     youtubeId: "PkZNo7MFNFg",
     videoDurationSec: 12403,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "Core syntax and how JavaScript runs in the browser.", "javascript", [
         "Getting Started",
@@ -120,7 +118,6 @@ export const courses: Course[] = [
     durationLabel: "4 weeks",
     youtubeId: "bMknfKXIFA8",
     videoDurationSec: 42927,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "Thinking in components.", "react", ["Why React?", "JSX and Components", "Props"]),
       nextWeek(2, "Week 3-4", "State, effects and data.", "react", [
@@ -142,7 +139,6 @@ export const courses: Course[] = [
     durationLabel: "4 weeks",
     youtubeId: "pQN-pnXPaVg",
     videoDurationSec: 7351,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "Create your first page and learn the essential tags.", "html", [
         "Document Structure",
@@ -171,7 +167,6 @@ export const courses: Course[] = [
     durationLabel: "6 weeks",
     youtubeId: "1Rs2ND1ryYc",
     videoDurationSec: 22718,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "Foundations of layout.", "css", ["The Box Model", "Flexbox", "CSS Grid"]),
       nextWeek(2, "Week 3-4", "Responsive patterns.", "css", ["Media Queries", "Fluid Typography", "Container Queries"]),
@@ -191,7 +186,6 @@ export const courses: Course[] = [
     durationLabel: "6 weeks",
     youtubeId: "rfscVS0vtbw",
     videoDurationSec: 16012,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "Getting set up and writing your first programs.", "python", [
         "Installing Python",
@@ -226,7 +220,6 @@ export const courses: Course[] = [
     durationLabel: "4 weeks",
     youtubeId: "30LWjhZzg50",
     videoDurationSec: 17185,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "The type system.", "typescript", ["Basic Types", "Interfaces vs Types"]),
       nextWeek(2, "Week 3-4", "Advanced patterns.", "typescript", ["Generics", "Narrowing", "Utility Types"]),
@@ -245,7 +238,6 @@ export const courses: Course[] = [
     durationLabel: "4 weeks",
     youtubeId: "RGOj5yH7evk",
     videoDurationSec: 4110,
-    seedWatchedPercent: 0,
     weeks: [
       firstWeek("Week 1-2", "Track changes and work with branches.", "git", [
         "What is Git?",

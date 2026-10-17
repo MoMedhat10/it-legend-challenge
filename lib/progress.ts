@@ -1,30 +1,10 @@
 import { parseJson, readStorage, writeStorage } from "@/lib/storage";
 import type { CourseStatus } from "@/lib/types";
 
-/*
- * Progress = how far into the course video the student has got.
- * The video is split into SEGMENTS equal parts; every part up to the
- * furthest point reached (by playing or seeking) counts as watched.
- */
+/** Progress = the furthest point reached in the course video (by playing or seeking), 0–100. */
+export const PROGRESS_KEY = "course-progress:v4";
 
-export const PROGRESS_KEY = "course-progress:v3";
-export const SEGMENTS = 100;
-
-export interface StoredCourseProgress {
-  watchedSegments: number[];
-}
-
-export type ProgressMap = Record<string, StoredCourseProgress>;
-
-export interface ProgressSeed {
-  slug: string;
-  seedWatchedPercent: number;
-}
-
-export interface ResolvedProgress {
-  percent: number;
-  status: CourseStatus;
-}
+export type ProgressMap = Record<string, number>;
 
 export function getStatus(percent: number): CourseStatus {
   if (percent <= 0) return "not-started";
@@ -32,30 +12,16 @@ export function getStatus(percent: number): CourseStatus {
   return "in-progress";
 }
 
-export function resolveProgress(seed: ProgressSeed, map: ProgressMap): ResolvedProgress {
-  const stored = map[seed.slug];
-  const percent = stored
-    ? Math.round((stored.watchedSegments.length / SEGMENTS) * 100)
-    : seed.seedWatchedPercent;
-  return { percent, status: getStatus(percent) };
+export function getCoursePercent(map: ProgressMap, slug: string): number {
+  const value = map[slug];
+  return typeof value === "number" ? Math.min(100, Math.max(0, Math.round(value))) : 0;
 }
 
-/** Demo progress becomes real watched segments on the first save, so the bar never jumps back. */
-function seedSegments(seed: ProgressSeed): number[] {
-  const count = Math.round((seed.seedWatchedPercent / 100) * SEGMENTS);
-  return Array.from({ length: count }, (_, i) => i);
-}
-
-export function addWatchedSegments(seed: ProgressSeed, segments: number[]): void {
+/** Only ever moves forward: rewatching an earlier part keeps the furthest point. */
+export function saveCoursePercent(slug: string, percent: number): void {
   const map = parseJson<ProgressMap>(readStorage("local", PROGRESS_KEY), {});
-  const watched = new Set(map[seed.slug]?.watchedSegments ?? seedSegments(seed));
-  const before = watched.size;
-  for (const segment of segments) {
-    if (segment >= 0 && segment < SEGMENTS) watched.add(segment);
-  }
-  if (watched.size === before && map[seed.slug]) return;
-  map[seed.slug] = { watchedSegments: [...watched].sort((a, b) => a - b) };
-  writeStorage("local", PROGRESS_KEY, map);
+  if (percent <= getCoursePercent(map, slug)) return;
+  writeStorage("local", PROGRESS_KEY, { ...map, [slug]: percent });
 }
 
 export const STATUS_LABEL: Record<CourseStatus, string> = {

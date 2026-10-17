@@ -1,15 +1,11 @@
 import { useStoredState } from "@/hooks/useStoredState";
-import {
-  PROGRESS_KEY,
-  resolveProgress,
-  type ProgressMap,
-  type ProgressSeed,
-  type ResolvedProgress,
-} from "@/lib/progress";
+import { getCoursePercent, getStatus, PROGRESS_KEY, type ProgressMap } from "@/lib/progress";
+import type { CourseStatus } from "@/lib/types";
 
 const EMPTY: ProgressMap = {};
 
-export function useCourseProgress(seed: ProgressSeed): ResolvedProgress {
+export function useCourseProgress(slug: string): { percent: number; status: CourseStatus } {
   const [map] = useStoredState<ProgressMap>(PROGRESS_KEY, EMPTY);
-  return resolveProgress(seed, map);
+  const percent = getCoursePercent(map, slug);
+  return { percent, status: getStatus(percent) };
 }

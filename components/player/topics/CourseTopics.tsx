@@ -3,7 +3,6 @@ import { PdfRow } from "@/components/player/topics/PdfRow";
 import { QuizRow } from "@/components/player/topics/QuizRow";
 import { TopicsProgress } from "@/components/player/topics/TopicsProgress";
 import { getQuiz } from "@/data/quizzes";
-import { getProgressSeed } from "@/lib/courses";
 import type { Course, TopicItem, Week } from "@/lib/types";
 
 export function CourseTopics({ course }: { course: Course }) {
@@ -19,7 +18,7 @@ export function CourseTopics({ course }: { course: Course }) {
       <h2 id="curriculum-heading" className="text-2xl font-semibold text-ink">
         Topics for This Course
       </h2>
-      <TopicsProgress seed={getProgressSeed(course)} />
+      <TopicsProgress slug={course.slug} />
       <div
         role="region"
         aria-label="Course topics"

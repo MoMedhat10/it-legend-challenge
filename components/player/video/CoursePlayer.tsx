@@ -6,12 +6,11 @@ import NextImage from "next/image";
 import { YouTubeVideo } from "@videojs/react/media/youtube-video";
 import { VideoPlayer, VideoSkin } from "@videojs/react/video";
 import { WatchTracker } from "@/components/player/video/WatchTracker";
-import type { ProgressSeed } from "@/lib/progress";
 
 export interface CoursePlayerProps {
   src: string;
   poster: string;
-  seed: ProgressSeed;
+  slug: string;
 }
 
 const skinTheme = {
@@ -22,7 +21,7 @@ const skinTheme = {
 } as CSSProperties;
 
 /** Video.js + YouTube. Loaded on the client only (see CourseVideo). */
-export default function CoursePlayer({ src, poster, seed }: CoursePlayerProps) {
+export default function CoursePlayer({ src, poster, slug }: CoursePlayerProps) {
   return (
     <VideoPlayer poster={poster}>
       <VideoSkin
@@ -34,7 +33,7 @@ export default function CoursePlayer({ src, poster, seed }: CoursePlayerProps) {
       >
         <YouTubeVideo src={src} playsInline />
       </VideoSkin>
-      <WatchTracker seed={seed} />
+      <WatchTracker slug={slug} />
     </VideoPlayer>
   );
 }

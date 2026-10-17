@@ -32,7 +32,6 @@ export interface Course {
   videoDurationSec: number;
   thumbnail?: string;
   weeks: Week[];
-  seedWatchedPercent: number;
 }
 
 export type CourseStatus = "not-started" | "in-progress" | "completed";
