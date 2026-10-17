@@ -29,8 +29,6 @@ export function CourseProgress({ slug, title }: { slug: string; title: string })
           card is clickable while keeping a single link per course. */}
       <ButtonLink
         href={`/courses/${slug}`}
-        // Per-link prefetch resolves the course params before the click, so the page opens instantly.
-        prefetch
         variant={status === "completed" ? "outline" : "primary"}
         aria-label={`${cta}: ${title}`}
         className="mt-1 w-full after:absolute after:inset-0 after:content-['']"

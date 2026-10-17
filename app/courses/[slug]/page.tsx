@@ -32,7 +32,6 @@ export async function generateMetadata({ params }: PageProps<"/courses/[slug]">)
   return { title: course?.title ?? "Course not found", description: course?.description };
 }
 
-// loading.tsx wraps this page in Suspense, so awaiting params here doesn't block navigation.
 export default async function CoursePlayerPage({ params }: PageProps<"/courses/[slug]">) {
   const { slug } = await params;
   const course = getCourseBySlug(slug);

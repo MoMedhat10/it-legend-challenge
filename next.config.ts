@@ -5,8 +5,6 @@ const nextConfig: NextConfig = {
   experimental: {
     agentFeedback: true,
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   images: {
     // Course thumbnails come from YouTube's thumbnail CDN.
     remotePatterns: [new URL("https://i.ytimg.com/vi/**")],
