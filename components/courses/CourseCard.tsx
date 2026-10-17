@@ -14,9 +14,7 @@ export function CourseCard({
   highPriority = false,
 }: {
   course: Course;
-  /** Above the fold: skip lazy loading. */
   eager?: boolean;
-  /** The LCP image: fetch before other images. */
   highPriority?: boolean;
 }) {
   return (

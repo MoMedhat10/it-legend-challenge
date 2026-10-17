@@ -26,8 +26,6 @@ export function CourseProgress({ slug, title, chapters }: { slug: string; title:
         <span className="text-sm font-semibold text-ink">{percent}%</span>
       </div>
       <ProgressBar value={percent} label={`${title} progress`} />
-      {/* The ::after overlay stretches this link over the whole card, so the
-          card is clickable while keeping a single link per course. */}
       <ButtonLink
         href={`/courses/${slug}`}
         variant={status === "completed" ? "outline" : "primary"}
@@ -36,7 +34,7 @@ export function CourseProgress({ slug, title, chapters }: { slug: string; title:
       >
         {cta}
         <ArrowRight aria-hidden className="size-4" />
-      </ButtonLink>
+      </ButtonLink> 
     </div>
   );
 }

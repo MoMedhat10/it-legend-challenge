@@ -1,7 +1,6 @@
 import { CourseCard } from "@/components/courses/CourseCard";
 import type { Course } from "@/lib/types";
 
-/** Cards in the first row on wide screens load eagerly (likely LCP). */
 const EAGER_CARDS = 4;
 
 export function CourseGrid({ courses }: { courses: Course[] }) {
