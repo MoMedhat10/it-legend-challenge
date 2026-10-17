@@ -7,7 +7,7 @@ import type { CourseStatus } from "@/lib/types";
  * furthest point reached (by playing or seeking) counts as watched.
  */
 
-export const PROGRESS_KEY = "course-progress:v2";
+export const PROGRESS_KEY = "course-progress:v3";
 export const SEGMENTS = 100;
 
 export interface StoredCourseProgress {
