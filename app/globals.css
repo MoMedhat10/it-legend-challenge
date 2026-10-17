@@ -72,6 +72,15 @@ html {
     z-index: 20;
   }
 
+  [data-pseudo-fullscreen] .media-fullscreen-button-enter-icon {
+    opacity: 0;
+  }
+
+  [data-pseudo-fullscreen] .media-fullscreen-button-exit-icon {
+    opacity: 1;
+    scale: 1;
+  }
+
   .player-layout__actions {
     grid-area: actions;
   }

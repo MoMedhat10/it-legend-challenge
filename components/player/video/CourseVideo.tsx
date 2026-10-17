@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import { usePlayerContext, VIDEO_ELEMENT_ID } from "@/components/player/PlayerContext";
 import type { CoursePlayerProps } from "@/components/player/video/CoursePlayer";
+import { usePseudoFullscreen } from "@/components/player/video/usePseudoFullscreen";
 import { useCourseProgress } from "@/hooks/useProgress";
 
 const CoursePlayer = dynamic(() => import("@/components/player/video/CoursePlayer"), { ssr: false });
@@ -15,6 +16,7 @@ export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { 
   const { watchedSec, completed } = useCourseProgress(player.slug, player.chapters);
   const resumeSec = completed === player.chapters.length ? 0 : watchedSec;
   const containerRef = useRef<HTMLDivElement>(null);
+  const pseudoFullscreen = usePseudoFullscreen(containerRef);
 
   useEffect(() => {
     if (started) containerRef.current?.focus();
@@ -27,7 +29,12 @@ export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { 
       tabIndex={-1}
       role="group"
       aria-label={`Video: ${title}`}
-      className="relative aspect-video w-full overflow-hidden rounded-md bg-ink outline-none"
+      data-pseudo-fullscreen={pseudoFullscreen || undefined}
+      className={
+        pseudoFullscreen
+          ? "fixed inset-0 z-50 bg-black outline-none"
+          : "relative aspect-video w-full overflow-hidden rounded-md bg-ink outline-none"
+      }
     >
       <Image
         src={poster}
