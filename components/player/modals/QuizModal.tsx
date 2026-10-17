@@ -128,7 +128,10 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
                       <label
                         key={option}
                         className={`flex min-h-12 cursor-pointer items-stretch overflow-hidden rounded-md text-sm shadow-[0_4px_16px_rgb(16_24_40/0.08)] transition-colors has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-quiz ${
-                          selected ? "bg-quiz-accent text-white" : "bg-white text-ink hover:bg-quiz-soft/60"
+                          // Fallback keeps the selected state blue even if the theme token is missing.
+                          selected
+                            ? "bg-(--color-quiz-accent,#5366e0) text-white"
+                            : "bg-white text-ink hover:bg-quiz-soft/60"
                         }`}
                       >
                         <input
