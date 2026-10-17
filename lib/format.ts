@@ -19,6 +19,18 @@ export function formatDurationLong(totalSec: number): string {
   return parts.join(" ");
 }
 
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC", // same output on server and client
+});
+
+/** "2026-10-10" → "Oct 10, 2026" */
+export function formatDate(iso: string): string {
+  return dateFormatter.format(new Date(iso));
+}
+
 export function pluralize(count: number, word: string): string {
   return `${count} ${word}${count === 1 ? "" : "s"}`;
 }

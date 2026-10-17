@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ChartNoAxesColumn, Clock, Globe, GraduationCap, Library, UserRound } from "lucide-react";
+import { CourseComments } from "@/components/player/comments/CourseComments";
 import { CourseMaterials } from "@/components/player/CourseMaterials";
 import { PlayerActions } from "@/components/player/PlayerActions";
 import { PlayerLayout } from "@/components/player/PlayerLayout";
@@ -8,6 +9,7 @@ import { CourseTopics } from "@/components/player/topics/CourseTopics";
 import { CourseVideo } from "@/components/player/video/CourseVideo";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
+import { seedComments } from "@/data/comments";
 import {
   getAllCourses,
   getCourseBySlug,
@@ -71,7 +73,7 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
             />
           }
           topics={<CourseTopics course={course} />}
-          comments={null}
+          comments={<CourseComments slug={course.slug} seedComments={seedComments} />}
         />
       </Container>
     </main>
