@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ChartNoAxesColumn, Clock, Globe, GraduationCap, Library, UserRound } from "lucide-react";
+import { CourseMaterials } from "@/components/player/CourseMaterials";
+import { PlayerActions } from "@/components/player/PlayerActions";
 import { PlayerLayout } from "@/components/player/PlayerLayout";
 import { CourseVideo } from "@/components/player/video/CourseVideo";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
-import { getAllCourses, getCourseBySlug, getPosterUrl, getProgressSeed, getYouTubeUrl } from "@/lib/courses";
+import {
+  getAllCourses,
+  getCourseBySlug,
+  getLessonCount,
+  getPosterUrl,
+  getProgressSeed,
+  getYouTubeUrl,
+} from "@/lib/courses";
 
 export function generateStaticParams() {
   return getAllCourses().map((course) => ({ slug: course.slug }));
@@ -46,8 +56,19 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
               seed={getProgressSeed(course)}
             />
           }
-          actions={null}
-          materials={null}
+          actions={<PlayerActions />}
+          materials={
+            <CourseMaterials
+              items={[
+                { icon: UserRound, label: "Instructor", value: course.instructor },
+                { icon: Clock, label: "Duration", value: course.durationLabel },
+                { icon: Library, label: "Lessons", value: String(getLessonCount(course)) },
+                { icon: GraduationCap, label: "Enrolled", value: `${course.enrolled.toLocaleString("en-US")} students` },
+                { icon: Globe, label: "Language", value: course.language },
+                { icon: ChartNoAxesColumn, label: "Level", value: course.level },
+              ]}
+            />
+          }
           topics={null}
           comments={null}
         />
