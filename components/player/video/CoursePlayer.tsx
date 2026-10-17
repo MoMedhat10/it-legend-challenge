@@ -2,14 +2,12 @@
 
 import "@videojs/react/video/skin.css";
 import type { CSSProperties } from "react";
-import NextImage from "next/image";
 import { YouTubeVideo } from "@videojs/react/media/youtube-video";
 import { VideoPlayer, VideoSkin } from "@videojs/react/video";
 import { WatchTracker } from "@/components/player/video/WatchTracker";
 
 export interface CoursePlayerProps {
   src: string;
-  poster: string;
   slug: string;
 }
 
@@ -20,18 +18,12 @@ const skinTheme = {
   "--media-border-radius": "0.375rem",
 } as CSSProperties;
 
-/** Video.js + YouTube. Loaded on the client only (see CourseVideo). */
-export default function CoursePlayer({ src, poster, slug }: CoursePlayerProps) {
+/** Video.js + YouTube. Mounted by CourseVideo after the play button is pressed, so it autoplays. */
+export default function CoursePlayer({ src, slug }: CoursePlayerProps) {
   return (
-    <VideoPlayer poster={poster}>
-      <VideoSkin
-        className="size-full"
-        style={skinTheme}
-        renderPoster={(props, { src: posterSrc }) =>
-          posterSrc ? <NextImage {...props} src={posterSrc} alt="" fill sizes="(min-width: 1024px) 60vw, 100vw" /> : null
-        }
-      >
-        <YouTubeVideo src={src} playsInline />
+    <VideoPlayer>
+      <VideoSkin className="size-full" style={skinTheme}>
+        <YouTubeVideo src={src} playsInline autoplay />
       </VideoSkin>
       <WatchTracker slug={slug} />
     </VideoPlayer>
