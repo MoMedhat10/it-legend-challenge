@@ -30,6 +30,7 @@
 
   /* Quiz screen (exam reference): indigo surface, yellow timer. */
   --color-quiz: #3f51b5;
+  --color-quiz-accent: #5366e0; /* selected answer; lighter than the screen, still AA with white */
   --color-quiz-soft: #e8eaf8;
   --color-timer: #f9d949;
 
