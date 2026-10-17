@@ -22,7 +22,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${jost.variable} antialiased`}>
+    // data-scroll-behavior lets Next.js turn smooth scrolling off during route transitions.
+    <html lang="en" className={`${jost.variable} antialiased`} data-scroll-behavior="smooth">
       <body className="flex min-h-dvh flex-col font-sans">{children}</body>
     </html>
   );
