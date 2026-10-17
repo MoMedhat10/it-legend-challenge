@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { ChartNoAxesColumn, Clock, Globe, GraduationCap, Library, UserRound } from "lucide-react";
 import { CourseComments } from "@/components/player/comments/CourseComments";
 import { CourseMaterials } from "@/components/player/CourseMaterials";
+import { AskQuestion } from "@/components/player/modals/AskQuestion";
+import { Leaderboard } from "@/components/player/modals/Leaderboard";
 import { PlayerActions } from "@/components/player/PlayerActions";
 import { PlayerLayout } from "@/components/player/PlayerLayout";
 import { CourseTopics } from "@/components/player/topics/CourseTopics";
@@ -10,6 +12,7 @@ import { CourseVideo } from "@/components/player/video/CourseVideo";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
 import { seedComments } from "@/data/comments";
+import { leaderboard, leaderboardMessage } from "@/data/leaderboard";
 import {
   getAllCourses,
   getCourseBySlug,
@@ -59,7 +62,12 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
               seed={getProgressSeed(course)}
             />
           }
-          actions={<PlayerActions />}
+          actions={
+            <PlayerActions>
+              <AskQuestion slug={course.slug} courseTitle={course.title} />
+              <Leaderboard courseTitle={course.title} message={leaderboardMessage} entries={leaderboard} />
+            </PlayerActions>
+          }
           materials={
             <CourseMaterials
               items={[
