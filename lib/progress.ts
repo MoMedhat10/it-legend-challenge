@@ -1,9 +1,9 @@
 import { parseJson, readStorage, writeStorage } from "@/lib/storage";
 import type { CourseStatus } from "@/lib/types";
 
-/** Progress = the furthest point reached in the course video (by playing or seeking), 0–100. */
-export const PROGRESS_KEY = "course-progress:v4";
+export const PROGRESS_KEY = "course-progress:v5";
 
+/** slug → furthest second reached in the course video */
 export type ProgressMap = Record<string, number>;
 
 export function getStatus(percent: number): CourseStatus {
@@ -12,16 +12,15 @@ export function getStatus(percent: number): CourseStatus {
   return "in-progress";
 }
 
-export function getCoursePercent(map: ProgressMap, slug: string): number {
+export function getWatchedSec(map: ProgressMap, slug: string): number {
   const value = map[slug];
-  return typeof value === "number" ? Math.min(100, Math.max(0, Math.round(value))) : 0;
+  return typeof value === "number" && value > 0 ? value : 0;
 }
 
-/** Only ever moves forward: rewatching an earlier part keeps the furthest point. */
-export function saveCoursePercent(slug: string, percent: number): void {
+export function saveWatchedSec(slug: string, sec: number): void {
   const map = parseJson<ProgressMap>(readStorage(PROGRESS_KEY), {});
-  if (percent <= getCoursePercent(map, slug)) return;
-  writeStorage(PROGRESS_KEY, { ...map, [slug]: percent });
+  if (sec <= getWatchedSec(map, slug)) return;
+  writeStorage(PROGRESS_KEY, { ...map, [slug]: sec });
 }
 
 export const STATUS_LABEL: Record<CourseStatus, string> = {

@@ -1,13 +1,5 @@
 export type TopicItem =
-  | {
-      id: string;
-      type: "lesson";
-      title: string;
-      locked?: boolean;
-      current?: boolean;
-      questionCount?: number;
-      durationMin?: number;
-    }
+  | { id: string; type: "lesson"; title: string; startSec?: number }
   | { id: string; type: "pdf"; title: string; file: string }
   | { id: string; type: "quiz"; title: string; quizId: string };
 

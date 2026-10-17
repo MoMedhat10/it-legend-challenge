@@ -1,38 +1,24 @@
 import type { Course, TopicItem, Week } from "@/lib/types";
 
-/*
- * Mock catalogue. Every course plays one YouTube video; ids were checked
- * against YouTube's oEmbed endpoint (exists + embeddable) and
- * videoDurationSec is the real video length.
- */
 
 const SUMMARY_PDF = "/pdfs/course-summary.pdf";
 
-const lesson = (
-  id: string,
-  title: string,
-  extra: Omit<Extract<TopicItem, { type: "lesson" }>, "id" | "title" | "type"> = { locked: true },
-): TopicItem => ({ id, title, type: "lesson", ...extra });
+const lesson = (id: string, title: string): TopicItem => ({ id, title, type: "lesson" });
 
 const pdf = (id: string): TopicItem => ({ id, title: "Course Summary (PDF)", type: "pdf", file: SUMMARY_PDF });
 
 const quiz = (id: string, title: string, quizId: string): TopicItem => ({ id, title, type: "quiz", quizId });
 
-/** First week: summary PDF, the current lesson, locked lessons, then the week quiz. */
-const firstWeek = (title: string, description: string, quizId: string, lessons: string[]): Week => {
-  const [current, ...rest] = lessons;
-  return {
-    id: "week-1",
-    title,
-    description,
-    items: [
-      pdf("w1-pdf"),
-      lesson("w1-l1", current, { current: true, questionCount: 0, durationMin: 30 }),
-      ...rest.map((name, i) => lesson(`w1-l${i + 2}`, name)),
-      quiz("w1-quiz", `${title}: Questions`, quizId),
-    ],
-  };
-};
+const firstWeek = (title: string, description: string, quizId: string, lessons: string[]): Week => ({
+  id: "week-1",
+  title,
+  description,
+  items: [
+    pdf("w1-pdf"),
+    ...lessons.map((name, i) => lesson(`w1-l${i + 1}`, name)),
+    quiz("w1-quiz", `${title}: Questions`, quizId),
+  ],
+});
 
 const nextWeek = (index: number, title: string, description: string, quizId: string, lessons: string[]): Week => ({
   id: `week-${index}`,
