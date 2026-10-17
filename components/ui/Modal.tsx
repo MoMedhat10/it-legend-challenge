@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, type ReactNode } from "react";
 import { X } from "lucide-react";
 
-type ModalSize = "md" | "fullscreen";
+type ModalSize = "md" | "lg" | "fullscreen";
 
 interface ModalProps {
   open: boolean;
@@ -21,6 +21,7 @@ interface ModalProps {
 
 const sizes: Record<ModalSize, string> = {
   md: "m-auto w-[min(34rem,calc(100%-2rem))] max-h-[calc(100dvh-2rem)] rounded-xl",
+  lg: "m-auto h-[min(85dvh,56rem)] w-[min(60rem,calc(100%-2rem))] max-h-none rounded-xl",
   fullscreen: "m-0 h-dvh max-h-none w-screen max-w-none",
 };
 
@@ -72,8 +73,8 @@ export function Modal({
         onClose();
       }}
       onClick={(event) => {
-        // Click on the backdrop (the dialog element itself) closes small modals.
-        if (size === "md" && event.target === event.currentTarget) onClose();
+        // Click on the backdrop (the dialog element itself) closes windowed modals.
+        if (size !== "fullscreen" && event.target === event.currentTarget) onClose();
       }}
       className={`overflow-hidden bg-white p-0 text-body shadow-2xl backdrop:bg-ink/60 open:flex open:flex-col ${sizes[size]}`}
     >

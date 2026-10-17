@@ -18,7 +18,7 @@ export function PdfModal({ open, onClose, title, courseTitle, file }: PdfModalPr
       onClose={onClose}
       title={title}
       subtitle={courseTitle}
-      size="fullscreen"
+      size="lg"
       headerActions={
         // Some mobile browsers only render the first page inline; offer the native viewer.
         <a
