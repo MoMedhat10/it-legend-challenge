@@ -7,7 +7,6 @@ import { useWideMode } from "@/components/player/WideMode";
 export const iconButtonStyles =
   "inline-flex size-10 items-center justify-center rounded-full border border-line bg-white text-ink transition-colors hover:border-brand hover:text-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong aria-pressed:border-brand aria-pressed:bg-brand-soft aria-pressed:text-brand-strong";
 
-/** Icon row under the video. `children` adds modal triggers (ask a question, leaderboard). */
 export function PlayerActions({ children }: { children?: ReactNode }) {
   const { wide, toggleWide } = useWideMode();
 

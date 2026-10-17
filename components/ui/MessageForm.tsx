@@ -9,7 +9,6 @@ interface MessageFormProps {
   placeholder: string;
   submitLabel: string;
   successMessage: string;
-  /** Controlled so callers can persist drafts. */
   value: string;
   onChange: (value: string) => void;
   onSubmit: (text: string) => void;
@@ -17,7 +16,6 @@ interface MessageFormProps {
   maxLength?: number;
 }
 
-/** Textarea + submit with validation, a character counter and screen-reader status messages. */
 export function MessageForm({
   label,
   placeholder,

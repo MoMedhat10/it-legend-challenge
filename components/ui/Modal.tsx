@@ -9,12 +9,9 @@ interface ModalProps {
   open: boolean;
   onClose: () => void;
   title: string;
-  /** Small line above the title, e.g. the course name. */
   subtitle?: string;
   size?: ModalSize;
-  /** Render your own header (the title is still used as the accessible name). */
   hideHeader?: boolean;
-  /** Extra actions shown next to the close button. */
   headerActions?: ReactNode;
   children: ReactNode;
 }
@@ -24,10 +21,6 @@ const sizes: Record<ModalSize, string> = {
   lg: "m-auto h-[min(85dvh,56rem)] w-[min(60rem,calc(100%-2rem))] max-h-none rounded-xl",
 };
 
-/**
- * Native <dialog> modal: focus trap, Esc to close and focus return come from
- * the browser. Content is only mounted while open.
- */
 export function Modal({
   open,
   onClose,
@@ -68,11 +61,10 @@ export function Modal({
       aria-labelledby={hideHeader ? undefined : titleId}
       aria-label={hideHeader ? title : undefined}
       onCancel={(event) => {
-        event.preventDefault(); // keep React state the source of truth
+        event.preventDefault();
         onClose();
       }}
       onClick={(event) => {
-        // Click on the backdrop (the dialog element itself) closes the modal.
         if (event.target === event.currentTarget) onClose();
       }}
       className={`overflow-hidden bg-white p-0 text-body shadow-2xl backdrop:bg-ink/60 open:flex open:flex-col ${sizes[size]}`}
