@@ -11,6 +11,7 @@ export interface CoursePlayerProps {
   src: string;
   slug: string;
   chapters: Chapter[];
+  autoplay?: boolean;
 }
 
 const skinTheme = {
@@ -20,11 +21,11 @@ const skinTheme = {
   "--media-border-radius": "0.375rem",
 } as CSSProperties;
 
-export default function CoursePlayer({ src, slug, chapters }: CoursePlayerProps) {
+export default function CoursePlayer({ src, slug, chapters, autoplay = true }: CoursePlayerProps) {
   return (
     <VideoPlayer>
       <VideoSkin className="size-full" style={skinTheme}>
-        <YouTubeVideo src={src} playsInline autoplay />
+        <YouTubeVideo src={src} playsInline autoplay={autoplay} />
       </VideoSkin>
       <PlayerSync slug={slug} chapters={chapters} />
     </VideoPlayer>

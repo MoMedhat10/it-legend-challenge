@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import { usePlayerContext, VIDEO_ELEMENT_ID } from "@/components/player/PlayerContext";
 import type { CoursePlayerProps } from "@/components/player/video/CoursePlayer";
+import { usePreloadOnTouch } from "@/components/player/video/usePreloadOnTouch";
 import { usePseudoFullscreen } from "@/components/player/video/usePseudoFullscreen";
 import { useCourseProgress } from "@/hooks/useProgress";
 
@@ -16,6 +17,7 @@ export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { 
   const { watchedSec, completed } = useCourseProgress(player.slug, player.chapters);
   const resumeSec = completed === player.chapters.length ? 0 : watchedSec;
   const containerRef = useRef<HTMLDivElement>(null);
+  const preloaded = usePreloadOnTouch(!started);
   const pseudoFullscreen = usePseudoFullscreen(containerRef);
 
   useEffect(() => {
@@ -43,18 +45,19 @@ export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { 
         sizes="(min-width: 1024px) 60vw, 100vw"
         fetchPriority="high"
         loading="eager"
-        className="object-cover"
+        className={`object-cover ${started ? "" : "z-10"}`}
       />
-      {started ? (
+      {(started || preloaded) && (
         <div className="absolute inset-0">
-          <CoursePlayer {...player} />
+          <CoursePlayer {...player} autoplay={!preloaded} />
         </div>
-      ) : (
+      )}
+      {!started && (
         <button
           type="button"
           onClick={() => playFrom(resumeSec)}
           aria-label={`${resumeSec > 0 ? "Resume" : "Play"} video: ${title}`}
-          className="group absolute inset-0 flex items-center justify-center bg-ink/25 transition-colors hover:bg-ink/15 focus-visible:outline-none"
+          className="group absolute inset-0 z-20 flex items-center justify-center bg-ink/25 transition-colors hover:bg-ink/15 focus-visible:outline-none"
         >
           <span className="flex size-16 items-center justify-center rounded-full bg-white text-brand-strong shadow-lg transition-transform duration-200 group-hover:scale-105 group-focus-visible:ring-4 group-focus-visible:ring-white/70">
             <Play aria-hidden className="ml-1 size-7 fill-current" />
