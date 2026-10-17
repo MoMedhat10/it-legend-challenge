@@ -89,18 +89,18 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 1240,
-    durationLabel: "2 weeks",
+    durationLabel: "4 weeks",
     youtubeId: "PkZNo7MFNFg",
     videoDurationSec: 12403,
     seedWatchedPercent: 100,
     weeks: [
-      firstWeek("Week 1", "Core syntax and how JavaScript runs in the browser.", "javascript", [
+      firstWeek("Week 1-2", "Core syntax and how JavaScript runs in the browser.", "javascript", [
         "Getting Started",
         "Variables and Data Types",
         "Strings and Template Literals",
         "Functions and Scope",
       ]),
-      nextWeek(2, "Week 2", "Working with collections and the DOM.", "javascript", [
+      nextWeek(2, "Week 3-4", "Working with collections and the DOM.", "javascript", [
         "Arrays and Loops",
         "Objects and JSON",
         "The DOM",
@@ -139,15 +139,22 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 2310,
-    durationLabel: "1 week",
+    durationLabel: "4 weeks",
     youtubeId: "pQN-pnXPaVg",
     videoDurationSec: 7351,
     seedWatchedPercent: 0,
     weeks: [
-      firstWeek("Week 1", "The building blocks of every web page.", "html", [
+      firstWeek("Week 1-2", "Create your first page and learn the essential tags.", "html", [
         "Document Structure",
-        "Text, Links and Images",
+        "Head and Text",
+        "Lists and Links",
+        "Images",
+      ]),
+      nextWeek(2, "Week 3-4", "Structure real pages with semantic tags, tables, and forms.", "html", [
+        "Semantic Tags",
+        "Tables",
         "Forms and Inputs",
+        "Final Project",
       ]),
     ],
   },
@@ -161,14 +168,14 @@ export const courses: Course[] = [
     level: "Intermediate",
     language: "English",
     enrolled: 540,
-    durationLabel: "3 weeks",
+    durationLabel: "6 weeks",
     youtubeId: "1Rs2ND1ryYc",
     videoDurationSec: 22718,
     seedWatchedPercent: 0,
     weeks: [
-      firstWeek("Week 1", "Foundations of layout.", "css", ["The Box Model", "Flexbox", "CSS Grid"]),
-      nextWeek(2, "Week 2", "Responsive patterns.", "css", ["Media Queries", "Fluid Typography", "Container Queries"]),
-      nextWeek(3, "Week 3", "Putting it all together.", "css", ["Landing Page One", "Landing Page Two", "Landing Page Three"]),
+      firstWeek("Week 1-2", "Foundations of layout.", "css", ["The Box Model", "Flexbox", "CSS Grid"]),
+      nextWeek(2, "Week 3-4", "Responsive patterns.", "css", ["Media Queries", "Fluid Typography", "Container Queries"]),
+      nextWeek(3, "Week 5-6", "Putting it all together.", "css", ["Landing Page One", "Landing Page Two", "Landing Page Three"]),
     ],
   },
   {
@@ -216,13 +223,13 @@ export const courses: Course[] = [
     level: "Advanced",
     language: "English",
     enrolled: 410,
-    durationLabel: "2 weeks",
+    durationLabel: "4 weeks",
     youtubeId: "30LWjhZzg50",
     videoDurationSec: 17185,
     seedWatchedPercent: 67,
     weeks: [
-      firstWeek("Week 1", "The type system.", "typescript", ["Basic Types", "Interfaces vs Types"]),
-      nextWeek(2, "Week 2", "Advanced patterns.", "typescript", ["Generics", "Narrowing", "Utility Types"]),
+      firstWeek("Week 1-2", "The type system.", "typescript", ["Basic Types", "Interfaces vs Types"]),
+      nextWeek(2, "Week 3-4", "Advanced patterns.", "typescript", ["Generics", "Narrowing", "Utility Types"]),
     ],
   },
   {
@@ -235,15 +242,20 @@ export const courses: Course[] = [
     level: "Beginner",
     language: "English",
     enrolled: 1780,
-    durationLabel: "1 week",
+    durationLabel: "4 weeks",
     youtubeId: "RGOj5yH7evk",
     videoDurationSec: 4110,
     seedWatchedPercent: 0,
     weeks: [
-      firstWeek("Week 1", "Version control in one week.", "git", [
+      firstWeek("Week 1-2", "Track changes and work with branches.", "git", [
         "What is Git?",
+        "Commits and History",
         "Branches and Merging",
+      ]),
+      nextWeek(2, "Week 3-4", "Collaborate with your team on GitHub.", "git", [
+        "Remotes and Pushing",
         "Pull Requests on GitHub",
+        "Resolving Conflicts",
       ]),
     ],
   },
