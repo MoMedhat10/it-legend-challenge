@@ -40,7 +40,7 @@ function formatClock(totalSec: number): string {
 const navButton =
   "inline-flex min-h-11 items-center gap-1 rounded-md px-3 text-sm font-medium text-quiz hover:bg-quiz-soft disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-quiz";
 
-/** Full-screen exam (reference: indigo screen, yellow timer, numbered steps, white question card). */
+/** Exam modal (reference: indigo panel, yellow timer, numbered steps, white question card). */
 export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalProps) {
   const [state, setState] = useStoredState<QuizState>(storageKey, freshState(quiz));
   const { answers, current, remainingSec, submitted } = state;
@@ -67,7 +67,7 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
   const retry = () => setState(freshState(quiz));
 
   return (
-    <Modal open={open} onClose={onClose} title={title} size="fullscreen" hideHeader>
+    <Modal open={open} onClose={onClose} title={title} size="md" hideHeader>
       <div className="flex flex-1 flex-col overflow-y-auto bg-quiz text-white">
         <div className="mx-auto flex w-full max-w-xl flex-1 flex-col">
           <header className="relative flex min-h-16 items-center justify-center px-3 pt-3">
