@@ -50,14 +50,17 @@ export function Modal({
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  // Lock page scroll behind the modal.
+  // Lock page scroll behind the modal and give focus back to the trigger on close
+  // (the browser's own focus return is lost when the focused content unmounts).
   useEffect(() => {
     if (!open) return;
+    const trigger = document.activeElement as HTMLElement | null;
     const root = document.documentElement;
     const previous = root.style.overflow;
     root.style.overflow = "hidden";
     return () => {
       root.style.overflow = previous;
+      trigger?.focus({ preventScroll: true });
     };
   }, [open]);
 
