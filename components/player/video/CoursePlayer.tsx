@@ -4,11 +4,13 @@ import "@videojs/react/video/skin.css";
 import type { CSSProperties } from "react";
 import { YouTubeVideo } from "@videojs/react/media/youtube-video";
 import { VideoPlayer, VideoSkin } from "@videojs/react/video";
-import { WatchTracker } from "@/components/player/video/WatchTracker";
+import { PlayerSync } from "@/components/player/video/PlayerSync";
+import type { Chapter } from "@/lib/chapters";
 
 export interface CoursePlayerProps {
   src: string;
   slug: string;
+  chapters: Chapter[];
 }
 
 const skinTheme = {
@@ -18,14 +20,13 @@ const skinTheme = {
   "--media-border-radius": "0.375rem",
 } as CSSProperties;
 
-/** Video.js + YouTube. Mounted by CourseVideo after the play button is pressed, so it autoplays. */
-export default function CoursePlayer({ src, slug }: CoursePlayerProps) {
+export default function CoursePlayer({ src, slug, chapters }: CoursePlayerProps) {
   return (
     <VideoPlayer>
       <VideoSkin className="size-full" style={skinTheme}>
         <YouTubeVideo src={src} playsInline autoplay />
       </VideoSkin>
-      <WatchTracker slug={slug} />
+      <PlayerSync slug={slug} chapters={chapters} />
     </VideoPlayer>
   );
 }

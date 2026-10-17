@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { PlayerProvider } from "@/components/player/PlayerContext";
 import { useWideMode, WideModeProvider } from "@/components/player/WideMode";
 
 interface PlayerLayoutProps {
@@ -11,11 +12,12 @@ interface PlayerLayoutProps {
   comments: ReactNode;
 }
 
-/** Client shell for the player page (grid areas live in globals.css); the slots stay Server Components. */
 export function PlayerLayout(props: PlayerLayoutProps) {
   return (
     <WideModeProvider>
-      <LayoutGrid {...props} />
+      <PlayerProvider>
+        <LayoutGrid {...props} />
+      </PlayerProvider>
     </WideModeProvider>
   );
 }

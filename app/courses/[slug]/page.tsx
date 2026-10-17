@@ -20,6 +20,7 @@ import {
   getPosterUrl,
   getYouTubeUrl,
 } from "@/lib/courses";
+import { getChapters } from "@/lib/chapters";
 import { formatDuration } from "@/lib/format";
 
 export function generateStaticParams() {
@@ -60,6 +61,7 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
               src={getYouTubeUrl(course)}
               poster={getPosterUrl(course)}
               slug={course.slug}
+              chapters={getChapters(course)}
             />
           }
           actions={

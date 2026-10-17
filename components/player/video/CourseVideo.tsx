@@ -1,32 +1,34 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Play } from "lucide-react";
+import { usePlayerContext, VIDEO_ELEMENT_ID } from "@/components/player/PlayerContext";
 import type { CoursePlayerProps } from "@/components/player/video/CoursePlayer";
+import { useCourseProgress } from "@/hooks/useProgress";
 
-// Video.js + the YouTube embed (~1 MB) load only after the student presses play.
 const CoursePlayer = dynamic(() => import("@/components/player/video/CoursePlayer"), { ssr: false });
 
 export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { title: string; poster: string }) {
-  const [playing, setPlaying] = useState(false);
+  const { started, playFrom } = usePlayerContext();
+  const { watchedSec, completed } = useCourseProgress(player.slug, player.chapters);
+  const resumeSec = completed === player.chapters.length ? 0 : watchedSec;
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // The play button disappears on click; keep keyboard focus on the video area.
   useEffect(() => {
-    if (playing) containerRef.current?.focus();
-  }, [playing]);
+    if (started) containerRef.current?.focus();
+  }, [started]);
 
   return (
     <div
       ref={containerRef}
+      id={VIDEO_ELEMENT_ID}
       tabIndex={-1}
       role="group"
       aria-label={`Video: ${title}`}
       className="relative aspect-video w-full overflow-hidden rounded-md bg-ink outline-none"
     >
-      {/* Server-rendered poster: paints instantly (LCP) and stays underneath while the player loads. */}
       <Image
         src={poster}
         alt=""
@@ -36,15 +38,15 @@ export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { 
         loading="eager"
         className="object-cover"
       />
-      {playing ? (
+      {started ? (
         <div className="absolute inset-0">
           <CoursePlayer {...player} />
         </div>
       ) : (
         <button
           type="button"
-          onClick={() => setPlaying(true)}
-          aria-label={`Play video: ${title}`}
+          onClick={() => playFrom(resumeSec)}
+          aria-label={`${resumeSec > 0 ? "Resume" : "Play"} video: ${title}`}
           className="group absolute inset-0 flex items-center justify-center bg-ink/25 transition-colors hover:bg-ink/15 focus-visible:outline-none"
         >
           <span className="flex size-16 items-center justify-center rounded-full bg-white text-brand-strong shadow-lg transition-transform duration-200 group-hover:scale-105 group-focus-visible:ring-4 group-focus-visible:ring-white/70">
