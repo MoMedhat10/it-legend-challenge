@@ -1,0 +1,65 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 695 >>
+stream
+BT
+/F1 24 Tf 72 740 Td (Course Summary) Tj -72 -740 Td
+/F1 12 Tf 72 704 Td () Tj -72 -704 Td
+/F1 12 Tf 72 682 Td (Welcome to the course! This summary lists what you will learn) Tj -72 -682 Td
+/F1 12 Tf 72 660 Td (and how the course is organised.) Tj -72 -660 Td
+/F1 12 Tf 72 638 Td () Tj -72 -638 Td
+/F1 15 Tf 72 616 Td (How to use this course) Tj -72 -616 Td
+/F1 12 Tf 72 594 Td (- Watch the course video from start to finish.) Tj -72 -594 Td
+/F1 12 Tf 72 572 Td (- Your progress bar fills as you watch.) Tj -72 -572 Td
+/F1 12 Tf 72 550 Td (- Take the quiz at the end of every week.) Tj -72 -550 Td
+/F1 12 Tf 72 528 Td (- Ask questions and share comments with other students.) Tj -72 -528 Td
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 683 >>
+stream
+BT
+/F1 24 Tf 72 740 Td (Weekly Plan) Tj -72 -740 Td
+/F1 12 Tf 72 704 Td () Tj -72 -704 Td
+/F1 12 Tf 72 682 Td (Week 1: Foundations and your first exercises.) Tj -72 -682 Td
+/F1 12 Tf 72 660 Td (Week 2: Core concepts with hands-on practice.) Tj -72 -660 Td
+/F1 12 Tf 72 638 Td (Week 3+: Projects that put everything together.) Tj -72 -638 Td
+/F1 12 Tf 72 616 Td () Tj -72 -616 Td
+/F1 15 Tf 72 594 Td (Tips) Tj -72 -594 Td
+/F1 12 Tf 72 572 Td (- Pause the video and try every example yourself.) Tj -72 -572 Td
+/F1 12 Tf 72 550 Td (- Re-take quizzes until you score at least 60%.) Tj -72 -550 Td
+/F1 12 Tf 72 528 Td (- Keep notes; you will reuse them in the projects.) Tj -72 -528 Td
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000191 00000 n 
+0000000317 00000 n 
+0000001063 00000 n 
+0000001189 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1923
+%%EOF
