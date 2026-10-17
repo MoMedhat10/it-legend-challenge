@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { CourseGrid } from "@/components/courses/CourseGrid";
+import { CoursesHero } from "@/components/courses/CoursesHero";
 import { Container } from "@/components/ui/Container";
-import { getAllCourses } from "@/lib/courses";
+import { getAllCourses, getProgressSeed } from "@/lib/courses";
 
 export const metadata: Metadata = {
   title: "Courses",
@@ -13,6 +14,7 @@ export default function CoursesPage() {
 
   return (
     <main id="main" className="flex-1 pb-16">
+      <CoursesHero seeds={courses.map(getProgressSeed)} />
       <Container>
         <section aria-labelledby="all-courses-heading" className="pt-10">
           <div className="mb-6 flex items-baseline justify-between gap-4">
