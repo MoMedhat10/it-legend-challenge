@@ -2,9 +2,9 @@ import { parseJson, readStorage, writeStorage } from "@/lib/storage";
 import type { CourseStatus } from "@/lib/types";
 
 /*
- * Progress = how much of the course video was actually watched.
- * The video is split into SEGMENTS equal parts; a part counts once it has
- * been played through, so seeking to the end does not complete a course.
+ * Progress = how far into the course video the student has got.
+ * The video is split into SEGMENTS equal parts; every part up to the
+ * furthest point reached (by playing or seeking) counts as watched.
  */
 
 export const PROGRESS_KEY = "course-progress:v2";

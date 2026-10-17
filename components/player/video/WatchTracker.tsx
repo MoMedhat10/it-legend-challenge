@@ -1,42 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { usePlayer } from "@videojs/react/video";
 import { addWatchedSegments, SEGMENTS, type ProgressSeed } from "@/lib/progress";
 
-/** Longest gap between two time updates that still counts as continuous playback. */
-const MAX_PLAYBACK_STEP_SEC = 3;
-
 /**
- * Marks video segments as watched while the video plays continuously.
- * Seeks (jumps bigger than a normal playback step) are ignored, so skipping
- * to the end does not complete the course.
+ * Progress follows the furthest point reached in the video: playing or
+ * seeking forward fills every segment up to the playhead.
  */
 export function WatchTracker({ seed }: { seed: ProgressSeed }) {
   const currentTime = usePlayer((s) => s.currentTime);
   const duration = usePlayer((s) => s.duration);
-  const paused = usePlayer((s) => s.paused);
-  const lastTime = useRef<number | null>(null);
 
   useEffect(() => {
-    if (paused || !duration) {
-      lastTime.current = null;
-      return;
-    }
-    const previous = lastTime.current;
-    lastTime.current = currentTime;
-    if (previous === null) return;
-
-    const step = currentTime - previous;
-    if (step <= 0 || step > MAX_PLAYBACK_STEP_SEC) return;
-
-    const from = Math.floor((previous / duration) * SEGMENTS);
-    const to = Math.floor((currentTime / duration) * SEGMENTS);
-    const finished: number[] = [];
-    for (let segment = from; segment < to; segment++) finished.push(segment);
-    if (currentTime >= duration - 1) finished.push(SEGMENTS - 1);
-    if (finished.length > 0) addWatchedSegments(seed, finished);
-  }, [currentTime, duration, paused, seed]);
+    if (!duration || currentTime <= 0) return;
+    // Treat the last second as the end so short rounding gaps still complete the course.
+    const reached = currentTime >= duration - 1 ? SEGMENTS : Math.floor((currentTime / duration) * SEGMENTS);
+    if (reached > 0) addWatchedSegments(seed, Array.from({ length: reached }, (_, i) => i));
+  }, [currentTime, duration, seed]);
 
   return null;
 }
