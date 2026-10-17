@@ -68,8 +68,8 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
 
   return (
     <Modal open={open} onClose={onClose} title={title} hideHeader>
-      <div className="flex flex-1 flex-col overflow-y-auto bg-quiz text-white">
-        <div className="mx-auto flex w-full max-w-xl flex-1 flex-col">
+      <div className="flex flex-auto flex-col overflow-y-auto bg-quiz text-white">
+        <div className="mx-auto flex w-full max-w-xl flex-auto flex-col">
           <header className="relative flex min-h-16 items-center justify-center px-3 pt-3">
             <button
               type="button"
@@ -116,7 +116,7 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
               </nav>
 
               {/* White question card framed by the indigo screen, as in the reference. */}
-              <div className="mx-2 mb-2 flex flex-1 flex-col rounded-2xl bg-white p-5 text-body sm:mx-4 sm:mb-6 sm:p-7">
+              <div className="mx-2 mb-2 flex flex-auto flex-col rounded-2xl bg-white p-5 text-body sm:mx-4 sm:mb-6 sm:p-7">
                 <fieldset key={question.id} className="flex flex-col gap-4">
                   <legend className="mb-5 text-ink">
                     <span className="block text-sm font-semibold">{current + 1}.</span>
@@ -207,7 +207,7 @@ function QuizResult({
   const passed = percent >= PASS_PERCENT;
 
   return (
-    <div className="mx-2 mb-2 mt-6 flex flex-1 flex-col items-center gap-5 rounded-2xl bg-white p-6 text-center text-body sm:mx-4 sm:mb-6 sm:p-8">
+    <div className="mx-2 mb-2 mt-6 flex flex-auto flex-col items-center gap-5 rounded-2xl bg-white p-6 text-center text-body sm:mx-4 sm:mb-6 sm:p-8">
       <p className="text-sm font-medium uppercase tracking-wide text-muted">Your score</p>
       <p className="text-5xl font-semibold text-ink">{percent}%</p>
       <p role="status">
