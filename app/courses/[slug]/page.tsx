@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { ChartNoAxesColumn, Clock, Globe, GraduationCap, Library, UserRound } from "lucide-react";
 import { CourseComments } from "@/components/player/comments/CourseComments";
 import { CourseMaterials } from "@/components/player/CourseMaterials";
-import { CoursePageSkeleton } from "@/components/player/CoursePageSkeleton";
 import { AskQuestion } from "@/components/player/modals/AskQuestion";
 import { Leaderboard } from "@/components/player/modals/Leaderboard";
 import { PlayerActions } from "@/components/player/PlayerActions";
@@ -33,25 +31,14 @@ export async function generateMetadata({ params }: PageProps<"/courses/[slug]">)
   return { title: course?.title ?? "Course not found", description: course?.description };
 }
 
-// Not async: the URL is read inside the Suspense boundary, so client
-// navigations show the skeleton instantly instead of blocking on params.
-export default function CoursePlayerPage({ params }: PageProps<"/courses/[slug]">) {
-  return (
-    <main id="main" className="flex-1 pb-16">
-      <Suspense fallback={<CoursePageSkeleton />}>
-        <CourseContent params={params} />
-      </Suspense>
-    </main>
-  );
-}
-
-async function CourseContent({ params }: Pick<PageProps<"/courses/[slug]">, "params">) {
+// loading.tsx wraps this page in Suspense, so awaiting params here doesn't block navigation.
+export default async function CoursePlayerPage({ params }: PageProps<"/courses/[slug]">) {
   const { slug } = await params;
   const course = getCourseBySlug(slug);
   if (!course) notFound();
 
   return (
-    <>
+    <main id="main" className="flex-1 pb-16">
       <header className="bg-surface py-6 sm:py-8">
         <Container className="flex flex-col gap-3">
           <Breadcrumb
@@ -97,6 +84,6 @@ async function CourseContent({ params }: Pick<PageProps<"/courses/[slug]">, "par
           comments={<CourseComments slug={course.slug} seedComments={seedComments} />}
         />
       </Container>
-    </>
+    </main>
   );
 }
