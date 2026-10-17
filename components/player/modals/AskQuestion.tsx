@@ -7,10 +7,10 @@ import { MessageForm } from "@/components/ui/MessageForm";
 import { Modal } from "@/components/ui/Modal";
 import { useStoredState } from "@/hooks/useStoredState";
 
-/** Icon trigger + modal. The draft lives in sessionStorage, so closing by mistake keeps the text for this session. */
+/** Icon trigger + modal. The draft is saved, so closing the modal by mistake keeps the text. */
 export function AskQuestion({ slug, courseTitle }: { slug: string; courseTitle: string }) {
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useStoredState(`ask-question-draft:${slug}`, "", "session");
+  const [draft, setDraft] = useStoredState(`ask-question-draft:${slug}`, "");
 
   return (
     <li>

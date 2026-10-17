@@ -1,23 +1,16 @@
-export type StorageKind = "local" | "session";
-
 const CHANGE_EVENT = "app-storage-change";
 
-function getStorage(kind: StorageKind): Storage {
-  return kind === "local" ? window.localStorage : window.sessionStorage;
-}
-
-export function readStorage(kind: StorageKind, key: string): string | null {
+export function readStorage(key: string): string | null {
   try {
-    return getStorage(kind).getItem(key);
+    return window.localStorage.getItem(key);
   } catch {
-    return null; // storage blocked (private mode, disabled cookies)
+    return null;
   }
 }
 
-export function writeStorage(kind: StorageKind, key: string, value: unknown): void {
+export function writeStorage(key: string, value: unknown): void {
   try {
-    if (value === undefined) getStorage(kind).removeItem(key);
-    else getStorage(kind).setItem(key, JSON.stringify(value));
+    window.localStorage.setItem(key, JSON.stringify(value));
   } catch {
     return;
   }

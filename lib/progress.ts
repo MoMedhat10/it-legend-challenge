@@ -19,9 +19,9 @@ export function getCoursePercent(map: ProgressMap, slug: string): number {
 
 /** Only ever moves forward: rewatching an earlier part keeps the furthest point. */
 export function saveCoursePercent(slug: string, percent: number): void {
-  const map = parseJson<ProgressMap>(readStorage("local", PROGRESS_KEY), {});
+  const map = parseJson<ProgressMap>(readStorage(PROGRESS_KEY), {});
   if (percent <= getCoursePercent(map, slug)) return;
-  writeStorage("local", PROGRESS_KEY, { ...map, [slug]: percent });
+  writeStorage(PROGRESS_KEY, { ...map, [slug]: percent });
 }
 
 export const STATUS_LABEL: Record<CourseStatus, string> = {
