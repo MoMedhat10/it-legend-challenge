@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PlayerLayout } from "@/components/player/PlayerLayout";
+import { CourseVideo } from "@/components/player/video/CourseVideo";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
-import { getAllCourses, getCourseBySlug } from "@/lib/courses";
+import { getAllCourses, getCourseBySlug, getPosterUrl, getProgressSeed, getYouTubeUrl } from "@/lib/courses";
 
 export function generateStaticParams() {
   return getAllCourses().map((course) => ({ slug: course.slug }));
@@ -37,7 +38,14 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
 
       <Container className="pt-4 lg:pt-6">
         <PlayerLayout
-          video={<div className="aspect-video rounded-md bg-ink" />}
+          video={
+            <CourseVideo
+              title={course.title}
+              src={getYouTubeUrl(course)}
+              poster={getPosterUrl(course)}
+              seed={getProgressSeed(course)}
+            />
+          }
           actions={null}
           materials={null}
           topics={null}
