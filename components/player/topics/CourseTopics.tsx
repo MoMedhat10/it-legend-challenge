@@ -8,12 +8,24 @@ import type { Course, TopicItem, Week } from "@/lib/types";
 
 export function CourseTopics({ course }: { course: Course }) {
   return (
-    <section id="curriculum" aria-labelledby="curriculum-heading" className="player-anchor">
+    // Desktop: the panel sticks while the page scrolls; heading + progress stay put
+    // and the weeks scroll inside it when they are taller than the viewport.
+    // 7rem = top offset + the page's bottom padding, so the heading is never cut at the end of the page.
+    <section
+      id="curriculum"
+      aria-labelledby="curriculum-heading"
+      className="player-anchor lg:sticky lg:top-6 lg:flex lg:max-h-[calc(100dvh-7rem)] lg:flex-col"
+    >
       <h2 id="curriculum-heading" className="text-2xl font-semibold text-ink">
         Topics for This Course
       </h2>
       <TopicsProgress seed={getProgressSeed(course)} />
-      <div className="mt-4 flex flex-col gap-6">
+      <div
+        role="region"
+        aria-label="Course topics"
+        tabIndex={0}
+        className="mt-4 flex flex-col gap-6 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain"
+      >
         {course.weeks.map((week) => (
           <WeekCard key={week.id} week={week} course={course} />
         ))}
