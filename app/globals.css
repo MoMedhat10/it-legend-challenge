@@ -35,6 +35,94 @@ body {
   color: var(--color-body);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+ * Course player layout.
+ * Mobile: one column in reading order, video sticks to the top.
+ * Desktop: topics in a right column; wide mode gives the video the full row.
+ */
+@layer components {
+  .player-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "video"
+      "actions"
+      "materials"
+      "topics"
+      "comments";
+    row-gap: 1.5rem;
+  }
+
+  .player-layout__video {
+    grid-area: video;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .player-layout__actions {
+    grid-area: actions;
+  }
+
+  .player-layout__materials {
+    grid-area: materials;
+    margin-top: 1rem;
+  }
+
+  .player-layout__topics {
+    grid-area: topics;
+  }
+
+  .player-layout__comments {
+    grid-area: comments;
+  }
+
+  /* Anchored sections must clear the sticky video on mobile. */
+  .player-anchor {
+    scroll-margin-top: calc((100vw - 2rem) * 9 / 16 + 1.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .player-layout {
+      column-gap: 3rem;
+      grid-template-columns: minmax(0, 1fr) 22rem;
+      grid-template-rows: auto auto auto 1fr;
+      grid-template-areas:
+        "video topics"
+        "actions topics"
+        "materials topics"
+        "comments topics";
+    }
+
+    .player-layout[data-wide="true"] {
+      grid-template-areas:
+        "video video"
+        "actions actions"
+        "materials topics"
+        "comments topics";
+    }
+
+    .player-layout__video {
+      position: static;
+    }
+
+    .player-anchor {
+      scroll-margin-top: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .player-layout {
+      column-gap: 4.5rem;
+      grid-template-columns: minmax(0, 1fr) 27rem;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
