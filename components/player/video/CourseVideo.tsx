@@ -6,8 +6,8 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import { usePlayerContext, VIDEO_ELEMENT_ID } from "@/components/player/PlayerContext";
 import type { CoursePlayerProps } from "@/components/player/video/CoursePlayer";
-import { usePreloadOnTouch } from "@/components/player/video/usePreloadOnTouch";
-import { usePseudoFullscreen } from "@/components/player/video/usePseudoFullscreen";
+import { usePreloadOnTouch } from "@/hooks/usePreloadOnTouch";
+import { usePseudoFullscreen } from "@/hooks/usePseudoFullscreen";
 import { useCourseProgress } from "@/hooks/useProgress";
 
 const CoursePlayer = dynamic(() => import("@/components/player/video/CoursePlayer"), { ssr: false });
