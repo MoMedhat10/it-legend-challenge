@@ -17,7 +17,7 @@ export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="rounded-sm hover:text-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
+                  className="-my-1 inline-block rounded-sm py-1 hover:text-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong"
                 >
                   {item.label}
                 </Link>

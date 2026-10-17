@@ -26,7 +26,7 @@ export function CourseCard({ course, eager = false }: { course: Course; eager?: 
         />
         <span
           aria-hidden
-          className="absolute inset-0 m-auto flex size-12 items-center justify-center rounded-full bg-white/95 text-brand-strong shadow-md transition-transform duration-200 group-hover:scale-110"
+          className="absolute inset-0 m-auto flex size-12 items-center justify-center rounded-full scale-90 bg-white/95 text-brand-strong opacity-0 shadow-md transition duration-200 group-focus-within:scale-100 group-focus-within:opacity-100 group-hover:scale-100 group-hover:opacity-100"
         >
           <Play className="ml-0.5 size-5 fill-current" />
         </span>
