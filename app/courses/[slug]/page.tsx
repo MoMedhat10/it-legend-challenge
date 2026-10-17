@@ -4,6 +4,7 @@ import { ChartNoAxesColumn, Clock, Globe, GraduationCap, Library, UserRound } fr
 import { CourseMaterials } from "@/components/player/CourseMaterials";
 import { PlayerActions } from "@/components/player/PlayerActions";
 import { PlayerLayout } from "@/components/player/PlayerLayout";
+import { CourseTopics } from "@/components/player/topics/CourseTopics";
 import { CourseVideo } from "@/components/player/video/CourseVideo";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Container } from "@/components/ui/Container";
@@ -69,7 +70,7 @@ export default async function CoursePlayerPage({ params }: PageProps<"/courses/[
               ]}
             />
           }
-          topics={null}
+          topics={<CourseTopics course={course} />}
           comments={null}
         />
       </Container>
