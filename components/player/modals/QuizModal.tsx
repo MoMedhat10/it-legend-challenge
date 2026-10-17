@@ -67,7 +67,7 @@ export function QuizModal({ open, onClose, title, quiz, storageKey }: QuizModalP
   const retry = () => setState(freshState(quiz));
 
   return (
-    <Modal open={open} onClose={onClose} title={title} size="md" hideHeader>
+    <Modal open={open} onClose={onClose} title={title} hideHeader>
       <div className="flex flex-1 flex-col overflow-y-auto bg-quiz text-white">
         <div className="mx-auto flex w-full max-w-xl flex-1 flex-col">
           <header className="relative flex min-h-16 items-center justify-center px-3 pt-3">

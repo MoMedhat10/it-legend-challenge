@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-export interface MaterialItem {
+interface MaterialItem {
   icon: LucideIcon;
   label: string;
   value: string;
