@@ -3,13 +3,12 @@ import { PdfRow } from "@/components/player/topics/PdfRow";
 import { QuizRow } from "@/components/player/topics/QuizRow";
 import { TopicsProgress } from "@/components/player/topics/TopicsProgress";
 import { getQuiz } from "@/data/quizzes";
+import { getChapters, type Chapter } from "@/lib/chapters";
 import type { Course, TopicItem, Week } from "@/lib/types";
 
 export function CourseTopics({ course }: { course: Course }) {
+  const chapters = getChapters(course);
   return (
-    // Desktop: the panel sticks while the page scrolls; heading + progress stay put
-    // and the weeks scroll inside it when they are taller than the viewport.
-    // 7rem = top offset + the page's bottom padding, so the heading is never cut at the end of the page.
     <section
       id="curriculum"
       aria-labelledby="curriculum-heading"
@@ -18,7 +17,7 @@ export function CourseTopics({ course }: { course: Course }) {
       <h2 id="curriculum-heading" className="text-2xl font-semibold text-ink">
         Topics for This Course
       </h2>
-      <TopicsProgress slug={course.slug} />
+      <TopicsProgress slug={course.slug} chapters={chapters} />
       <div
         role="region"
         aria-label="Course topics"
@@ -26,14 +25,14 @@ export function CourseTopics({ course }: { course: Course }) {
         className="mt-4 flex flex-col gap-6 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain"
       >
         {course.weeks.map((week) => (
-          <WeekCard key={week.id} week={week} course={course} />
+          <WeekCard key={week.id} week={week} course={course} chapters={chapters} />
         ))}
       </div>
     </section>
   );
 }
 
-function WeekCard({ week, course }: { week: Week; course: Course }) {
+function WeekCard({ week, course, chapters }: { week: Week; course: Course; chapters: Chapter[] }) {
   const headingId = `${week.id}-title`;
   return (
     <section aria-labelledby={headingId} className="rounded-md border border-line bg-white px-3 pb-2 pt-5">
@@ -45,17 +44,17 @@ function WeekCard({ week, course }: { week: Week; course: Course }) {
       </div>
       <ol className="divide-y divide-line border-t border-line">
         {week.items.map((item) => (
-          <TopicRow key={item.id} item={item} course={course} />
+          <TopicRow key={item.id} item={item} course={course} chapters={chapters} />
         ))}
       </ol>
     </section>
   );
 }
 
-function TopicRow({ item, course }: { item: TopicItem; course: Course }) {
+function TopicRow({ item, course, chapters }: { item: TopicItem; course: Course; chapters: Chapter[] }) {
   switch (item.type) {
     case "lesson":
-      return <LessonRow lesson={item} />;
+      return <LessonRow slug={course.slug} chapters={chapters} index={chapters.findIndex((c) => c.id === item.id)} />;
     case "pdf":
       return <PdfRow title={item.title} file={item.file} courseTitle={course.title} />;
     case "quiz": {

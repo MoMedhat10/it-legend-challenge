@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import { CourseMeta } from "@/components/courses/CourseMeta";
 import { CourseProgress } from "@/components/courses/CourseProgress";
+import { getChapters } from "@/lib/chapters";
 import { getLessonCount, getThumbnailUrl } from "@/lib/courses";
 import type { Course } from "@/lib/types";
 
@@ -52,7 +53,7 @@ export function CourseCard({
         <p className="line-clamp-2 text-sm leading-relaxed">{course.description}</p>
         <CourseMeta durationSec={course.videoDurationSec} lessonCount={getLessonCount(course)} />
         <div className="mt-auto border-t border-line pt-4">
-          <CourseProgress slug={course.slug} title={course.title} />
+          <CourseProgress slug={course.slug} title={course.title} chapters={getChapters(course)} />
         </div>
       </div>
     </article>

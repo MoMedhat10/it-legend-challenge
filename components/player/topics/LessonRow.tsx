@@ -1,40 +1,59 @@
-import { FileText, Lock } from "lucide-react";
+"use client";
+
+import { CircleCheck, FileText, Lock } from "lucide-react";
+import { usePlayerContext } from "@/components/player/PlayerContext";
 import { Badge } from "@/components/ui/Badge";
-import { pluralize } from "@/lib/format";
-import type { TopicItem } from "@/lib/types";
+import { useCourseProgress } from "@/hooks/useProgress";
+import type { Chapter } from "@/lib/chapters";
 
-type Lesson = Extract<TopicItem, { type: "lesson" }>;
+export function LessonRow({ slug, chapters, index }: { slug: string; chapters: Chapter[]; index: number }) {
+  const chapter = chapters[index];
+  const { completed } = useCourseProgress(slug, chapters);
+  const { started, currentChapter, playFrom } = usePlayerContext();
 
-/** Static lesson row: current lesson is highlighted, the rest are locked. */
-export function LessonRow({ lesson }: { lesson: Lesson }) {
+  const isCompleted = index < completed;
+  const isLocked = index > completed;
+  const activeIndex = started && currentChapter !== null ? currentChapter : Math.min(completed, chapters.length - 1);
+  const isCurrent = index === activeIndex;
+  const minutes = Math.max(1, Math.round((chapter.end - chapter.start) / 60));
+  const stateLabel = [isCurrent && "current lesson", isCompleted && "completed", isLocked && "locked"]
+    .filter(Boolean)
+    .join(", ");
+
   return (
-    <li
-      aria-current={lesson.current ? "step" : undefined}
-      className={`flex items-start justify-between gap-3 px-3 py-3.5 ${lesson.current ? "rounded-md bg-brand-soft/60" : ""}`}
-    >
-      <div className="flex min-w-0 flex-col gap-2">
-        <span className={`flex items-start gap-2.5 text-sm ${lesson.current ? "font-medium text-ink" : "text-body"}`}>
-          <FileText aria-hidden className="mt-0.5 size-4 shrink-0" />
-          <span>{lesson.title}</span>
-          {lesson.current && <span className="sr-only">(current lesson)</span>}
-          {lesson.locked && <span className="sr-only">(locked)</span>}
-        </span>
-        {(lesson.questionCount !== undefined || lesson.durationMin !== undefined) && (
-          <span className="flex flex-wrap gap-2 pl-6">
-            {lesson.questionCount !== undefined && (
-              <Badge tone="brand" className="rounded-sm px-2 py-0.5 text-[0.6875rem]">
-                {pluralize(lesson.questionCount, "question")}
-              </Badge>
-            )}
-            {lesson.durationMin !== undefined && (
-              <Badge tone="danger" className="rounded-sm px-2 py-0.5 text-[0.6875rem]">
-                {lesson.durationMin} minutes
-              </Badge>
-            )}
+    <li aria-current={isCurrent ? "step" : undefined}>
+      <button
+        type="button"
+        disabled={isLocked}
+        onClick={() => playFrom(chapter.start)}
+        className={`flex w-full items-start justify-between gap-3 rounded-md px-3 py-3.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong disabled:cursor-not-allowed ${
+          isCurrent ? "bg-brand-soft/60" : "enabled:hover:bg-surface"
+        }`}
+      >
+        <span className="flex min-w-0 flex-col gap-2">
+          <span
+            className={`flex items-start gap-2.5 text-sm ${
+              isCurrent ? "font-medium text-ink" : isLocked ? "text-muted" : "text-body"
+            }`}
+          >
+            <FileText aria-hidden className="mt-0.5 size-4 shrink-0" />
+            <span>{chapter.title}</span>
+            {stateLabel && <span className="sr-only">({stateLabel})</span>}
           </span>
-        )}
-      </div>
-      {lesson.locked && <Lock aria-hidden className="mt-0.5 size-4 shrink-0 text-muted" />}
+          {isCurrent && (
+            <span className="flex flex-wrap gap-2 pl-6">
+              <Badge tone="brand" className="rounded-sm px-2 py-0.5 text-[0.6875rem]">
+                0 questions
+              </Badge>
+              <Badge tone="danger" className="rounded-sm px-2 py-0.5 text-[0.6875rem]">
+                {minutes} minutes
+              </Badge>
+            </span>
+          )}
+        </span>
+        {isLocked && <Lock aria-hidden className="mt-0.5 size-4 shrink-0 text-muted" />}
+        {isCompleted && <CircleCheck aria-hidden className="mt-0.5 size-4 shrink-0 text-brand-strong" />}
+      </button>
     </li>
   );
 }
