@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { CircleHelp } from "lucide-react";
-import { QuizModal } from "@/components/player/modals/QuizModal";
-import { rowButtonStyles } from "@/components/player/topics/PdfRow";
+import { QuizModal } from "@/components/modals/QuizModal";
+import { rowButtonStyles } from "@/components/topics/PdfRow";
 import { useStoredState } from "@/hooks/useStoredState";
 import type { Quiz } from "@/lib/types";
 

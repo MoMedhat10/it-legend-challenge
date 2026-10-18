@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FileText } from "lucide-react";
-import { PdfModal } from "@/components/player/modals/PdfModal";
+import { PdfModal } from "@/components/modals/PdfModal";
 
 export const rowButtonStyles =
   "inline-flex min-h-8 shrink-0 items-center rounded-sm border px-2.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-strong";

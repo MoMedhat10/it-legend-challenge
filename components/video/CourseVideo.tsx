@@ -5,12 +5,12 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Play } from "lucide-react";
 import { usePlayerContext, VIDEO_ELEMENT_ID } from "@/components/player/PlayerContext";
-import type { CoursePlayerProps } from "@/components/player/video/CoursePlayer";
+import type { CoursePlayerProps } from "@/components/video/CoursePlayer";
 import { usePreloadOnTouch } from "@/hooks/usePreloadOnTouch";
 import { usePseudoFullscreen } from "@/hooks/usePseudoFullscreen";
 import { useCourseProgress } from "@/hooks/useProgress";
 
-const CoursePlayer = dynamic(() => import("@/components/player/video/CoursePlayer"), { ssr: false });
+const CoursePlayer = dynamic(() => import("@/components/video/CoursePlayer"), { ssr: false });
 
 export function CourseVideo({ title, poster, ...player }: CoursePlayerProps & { title: string; poster: string }) {
   const { started, playFrom } = usePlayerContext();

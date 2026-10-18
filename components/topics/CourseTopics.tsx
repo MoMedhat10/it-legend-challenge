@@ -1,7 +1,7 @@
-import { LessonRow } from "@/components/player/topics/LessonRow";
-import { PdfRow } from "@/components/player/topics/PdfRow";
-import { QuizRow } from "@/components/player/topics/QuizRow";
-import { TopicsProgress } from "@/components/player/topics/TopicsProgress";
+import { LessonRow } from "@/components/topics/LessonRow";
+import { PdfRow } from "@/components/topics/PdfRow";
+import { QuizRow } from "@/components/topics/QuizRow";
+import { TopicsProgress } from "@/components/topics/TopicsProgress";
 import { getQuiz } from "@/data/quizzes";
 import { getChapters, type Chapter } from "@/lib/chapters";
 import type { Course, TopicItem, Week } from "@/lib/types";

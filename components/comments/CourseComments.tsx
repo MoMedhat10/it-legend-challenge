@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CommentItem } from "@/components/player/comments/CommentItem";
+import { CommentItem } from "@/components/comments/CommentItem";
 import { MessageForm } from "@/components/ui/MessageForm";
 import { useStoredState } from "@/hooks/useStoredState";
 import type { Comment } from "@/lib/types";

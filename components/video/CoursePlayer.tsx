@@ -4,7 +4,7 @@ import "@videojs/react/video/skin.css";
 import type { CSSProperties } from "react";
 import { YouTubeVideo } from "@videojs/react/media/youtube-video";
 import { VideoPlayer, VideoSkin } from "@videojs/react/video";
-import { PlayerSync } from "@/components/player/video/PlayerSync";
+import { PlayerSync } from "@/components/video/PlayerSync";
 import type { Chapter } from "@/lib/chapters";
 
 export interface CoursePlayerProps {
