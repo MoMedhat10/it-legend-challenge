@@ -30,7 +30,8 @@ npm run lint
 
 Built to match the Course Player reference (desktop and mobile):
 
-- **Video:** one YouTube video per course through Video.js. The poster and a play button render first, and YouTube loads only after **Play** is pressed. The button resumes from where the student stopped.
+- **Video:** one YouTube video per course through Video.js. The poster and a play button render first. On desktop, YouTube loads only after **Play** is pressed; on touch devices it loads behind the poster once the page is idle, so one tap starts playback with sound. The button resumes from where the student stopped.
+- **Fullscreen on iPhone:** iPhone Safari can't put a YouTube iframe in fullscreen, so there the player's fullscreen button stretches the video over the whole screen instead.
 - **Lessons are chapters of the video:**
   - Each lesson is a slice of the course video, and a lesson counts as **completed at 90%** watched.
   - Lessons **unlock one by one**. Seeking past the end of the current lesson snaps back.
@@ -85,10 +86,10 @@ components/
     WideMode.tsx             wide-mode state
     PlayerActions.tsx        icon row under the video
     CourseMaterials.tsx      reusable materials card
-    video/                   CourseVideo (poster + play), CoursePlayer (Video.js), PlayerSync
-    topics/                  CourseTopics, TopicsProgress, LessonRow, PdfRow, QuizRow
-    modals/                  QuizModal, PdfModal, AskQuestion, Leaderboard
-    comments/                CourseComments, CommentItem
+  video/                     CourseVideo (poster + play), CoursePlayer (Video.js), PlayerSync
+  topics/                    CourseTopics, TopicsProgress, LessonRow, PdfRow, QuizRow
+  modals/                    QuizModal, PdfModal, AskQuestion, Leaderboard
+  comments/                  CourseComments, CommentItem
 data/                        mock data: courses, quizzes, comments, leaderboard
 lib/
   types.ts                   Course, Week, TopicItem, Quiz, Comment…
@@ -100,10 +101,12 @@ lib/
 hooks/
   useStoredState.ts          useState that persists to localStorage and syncs across components
   useProgress.ts             useCourseProgress: completed lessons, %, status
+  usePreloadOnTouch.ts       loads the video player early on touch devices
+  usePseudoFullscreen.ts     fullscreen fallback for iPhone Safari
 public/pdfs/                 course summary PDF
 ```
 
-Generic UI lives in `components/ui`, page-specific components live next to their feature, data lives in `data/`, and logic lives in `lib/` and `hooks/`.
+Generic UI lives in `components/ui`, each feature has its own folder under `components/` (`courses`, `player`, `video`, `topics`, `modals`, `comments`), data lives in `data/`, and logic lives in `lib/` and `hooks/`.
 
 ## Architecture decisions
 
@@ -165,7 +168,8 @@ Everything is a Server Component unless it needs the browser:
 - **Cards** use `hqdefault`, which exists for every video, cropped to 16:9. **Player posters** use `maxresdefault`, checked to exist for every course.
 - **LCP image:** only the first card thumbnail and the player poster get `fetchPriority="high"`; everything else lazy-loads.
 - **CLS:** fixed `aspect-video` boxes keep layout shift at 0.
-- **Video facade:** Video.js and the YouTube embed (~1 MB) are in their own chunk (`next/dynamic`, `ssr: false`) and load only after **Play** is pressed.
+- **Video facade:** Video.js and the YouTube embed (~1 MB) are in their own chunk (`next/dynamic`, `ssr: false`). On desktop they load only after **Play** is pressed.
+- **Touch devices:** iOS only allows sound if playback starts within about a second of the tap, and loading the player takes longer. So `usePreloadOnTouch` loads the player behind the poster after the page is idle (`requestIdleCallback`), and the tap then plays immediately.
 - **Font:** a single family (Jost), self-hosted with `next/font`.
 - **Data:** every YouTube id was checked with YouTube's oEmbed endpoint (exists and allows embedding), and every video length is the real one.
 
@@ -175,10 +179,10 @@ Everything is a Server Component unless it needs the browser:
 | --- | --- | --- | --- | --- | --- | --- |
 | `/courses` — mobile | 97 | 100 | 100 | 100 | 2.5 s | 0 |
 | `/courses` — desktop | 100 | 100 | 100 | 100 | 0.5 s | 0 |
-| `/courses/[slug]` — mobile | 98 | 100 | 100 | 100 | 2.5 s | 0 |
+| `/courses/[slug]` — mobile | 98 | 100 | 96 | 100 | 2.3 s | 0 |
 | `/courses/[slug]` — desktop | 100 | 100 | 100 | 100 | 0.5 s | 0 |
 
-Total blocking time is 0 ms on all four.
+Total blocking time is 0 ms, except 20 ms on the mobile course page. There, Best practices is 96 because the preloaded YouTube player sets third-party cookies, which Lighthouse reports as an issue.
 
 ### Accessibility
 
@@ -196,29 +200,3 @@ Total blocking time is 0 ms on all four.
 - **Breakpoints:** courses grid of 1 → 2 → 3 → 4 columns; the player is one column on mobile and two columns from `lg`.
 - **Tested** at 320, 375/390, 768/820, 1024 and 1440px with no horizontal scroll. Long titles and descriptions are clamped.
 
-## Requirements → where to find them
-
-| Requirement | Implementation |
-| --- | --- |
-| ≥ 6 courses with image, name, description/instructor, status, progress, Start/Continue | `data/courses.ts`, `components/courses/*` |
-| Open the player when a course is chosen | card button → `/courses/[slug]` |
-| Video, lesson data, content list, current lesson state | `video/*`, `topics/*`, `lib/chapters.ts` |
-| Choose a lesson → content updates → current lesson marked | `LessonRow` → `PlayerContext.playFrom` → `PlayerSync` |
-| Course Materials, Course Progress, comments | `CourseMaterials`, `TopicsProgress`, `comments/*` |
-| Modals and interactive states | `components/ui/Modal.tsx`, `modals/*` |
-| Add a comment and show it in the list | `CourseComments` + `useStoredState` |
-| Exam saves the student's progress | `QuizModal` (saved per week) |
-| Mock data / structured data | `data/*`, typed in `lib/types.ts` |
-| Desktop, tablet, mobile | grid areas in `globals.css`, responsive grids |
-
-## Trade-offs and known limitations
-
-- **Chapter timing:** chapters are an even split of each video, so a lesson title won't line up exactly with what's on screen. Adding real `startSec` values to lessons in `data/courses.ts` fixes this without code changes.
-- **Seeking:** seeking within the current lesson counts as watching, so jumping to its end completes it. Seeking further ahead is blocked.
-- **Per-browser state:** progress, comments and quiz answers are saved per browser in `localStorage`; there is no backend.
-- **YouTube embed:** once playing, it sets third-party cookies (not on page load, thanks to the facade), and iOS may require a tap to start playback.
-- **Back navigation:** returning to a course page shows the poster again; the play button resumes from the saved position.
-
-## Git history
-
-Commits use `feat:` / `fix:` prefixes and follow the build order: courses page → course player → refinements (progress model, quiz design, sticky topics, performance) → lessons as chapters.
